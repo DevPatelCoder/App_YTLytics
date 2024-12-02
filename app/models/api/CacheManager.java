@@ -32,8 +32,6 @@ public class CacheManager {
      * @return A new instance of YouTubeService.
      * @throws GeneralSecurityException If there is a security issue.
      * @throws IOException If an IO exception occurs.
-     * @author Anubhav Mahajan
-     * @author Arpnik Singh
      */
     protected YouTubeService createYouTubeService(String apiKey) throws GeneralSecurityException, IOException {
         return new YouTubeService(apiKey);
