@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>YouTubeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.api</a> &gt; <span class="el_source">YouTubeService.java</span></div><h1>YouTubeService.java</h1><pre class="source lang-java linenums">package models.api;
+
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.*;
+import models.data.*;
+import models.helper.Converter;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * Service for interacting with the YouTube Data API.
+ * &lt;p&gt;
+ * This service allows searching for videos, retrieving video and channel details, fetching video tags,
+ * and performing sentiment analysis on video descriptions. It also supports analyzing word statistics
+ * from video descriptions based on a search term.
+ * &lt;/p&gt;
+ */
+public class YouTubeService {
+
+    private static final String APPLICATION_NAME = &quot;TubeLytics&quot;;
+<span class="fc" id="L30">    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();</span>
+    private final YouTube youtube;
+    private final String apiKey;
+
+    /**
+     * Creates a YouTube client using the provided API credentials.
+     *
+     * @return a configured {@link YouTube} client
+     * @throws GeneralSecurityException if there is an error related to security
+     * @throws IOException if there is an error during the creation of the client
+     *
+     */
+    protected YouTube createYouTubeClient() throws GeneralSecurityException, IOException {
+<span class="fc" id="L43">        return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY,</span>
+<span class="fc" id="L44">                null).setApplicationName(APPLICATION_NAME).build();</span>
+    }
+
+    /**
+     * Constructor for initializing YouTubeService with the API key.
+     *
+     * @param apiKey the YouTube Data API key
+     * @throws GeneralSecurityException if there is a security error
+     * @throws IOException if there is an I/O error during the initialization
+     *
+     */
+<span class="fc" id="L55">    public YouTubeService(String apiKey) throws GeneralSecurityException, IOException {</span>
+<span class="fc" id="L56">        this.apiKey = apiKey;</span>
+<span class="fc" id="L57">        this.youtube = createYouTubeClient();</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Searches for videos based on the specified query term and retrieves up to a maximum number of results.
+     *
+     * @param queryTerm the search term to query YouTube for
+     * @param maxCount the maximum number of search results to return
+     * @return a list of {@link VideoData} objects corresponding to the search results
+     * @throws IOException if there is an error during the search
+     *
+     */
+    public List&lt;VideoData&gt; searchVideos(String queryTerm, int maxCount) throws IOException {
+<span class="fc" id="L70">        YouTube.Search.List search = youtube.search().list(List.of(&quot;id&quot;, &quot;snippet&quot;));</span>
+<span class="fc" id="L71">        search.setQ(queryTerm);</span>
+<span class="fc" id="L72">        search.setType(List.of(&quot;video&quot;));</span>
+<span class="fc" id="L73">        search.setMaxResults(Long.valueOf(maxCount));</span>
+<span class="fc" id="L74">        search.setOrder(&quot;date&quot;); // Sort by upload date, newest first</span>
+
+        // Fields to retrieve relevant information including channelId
+<span class="fc" id="L77">        search.setFields(&quot;items(id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/channelTitle,snippet/channelId,snippet/description)&quot;);</span>
+<span class="fc" id="L78">        search.setKey(apiKey);</span>
+<span class="fc" id="L79">        SearchListResponse response = search.execute();</span>
+        // call converter method to convert search results to VideoData list
+<span class="fc" id="L81">        return Converter.convertToVideoData(response.getItems());</span>
+    }
+
+    /**
+     * Retrieves the details of a channel by its channel ID.
+     *
+     * @param channelId the ID of the channel whose details are to be fetched
+     * @return a {@link Channel} object containing the channel details, or null if not found
+     * @throws IOException if there is an error while fetching channel details
+     *
+     */
+    public Channel getChannelDetails(String channelId) throws IOException {
+<span class="fc" id="L93">        YouTube.Channels.List request = youtube.channels().list(List.of(&quot;snippet&quot;, &quot;statistics&quot;));</span>
+<span class="fc" id="L94">        request.setId(List.of(channelId));</span>
+<span class="fc" id="L95">        request.setFields(&quot;items(id,snippet/title,snippet/description,statistics/subscriberCount,statistics/viewCount,statistics/videoCount)&quot;);</span>
+<span class="fc" id="L96">        request.setKey(apiKey);</span>
+
+<span class="fc" id="L98">        ChannelListResponse response = request.execute();</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        return response.getItems().isEmpty() ? null : response.getItems().get(0);</span>
+    }
+
+    /**
+     * Retrieves the last set of videos from a specified channel.
+     *
+     * @param channelId the ID of the channel whose recent videos are to be fetched
+     * @param maxResults the maximum number of videos to retrieve
+     * @return a {@link ChannelVideoData} object containing details of the channel and recent videos
+     * @throws IOException if there is an error during the fetch
+     *
+     */
+    public ChannelVideoData getChannelRecentVideos(String channelId, int maxResults) throws IOException {
+
+<span class="fc" id="L113">        Channel channelInfo = getChannelDetails(channelId);</span>
+
+<span class="fc" id="L115">        YouTube.Search.List search = youtube.search().list(List.of(&quot;id&quot;, &quot;snippet&quot;));</span>
+<span class="fc" id="L116">        search.setChannelId(channelId);</span>
+<span class="fc" id="L117">        search.setOrder(&quot;date&quot;);</span>
+<span class="fc" id="L118">        search.setMaxResults((long) maxResults);</span>
+<span class="fc" id="L119">        search.setType(List.of(&quot;video&quot;));</span>
+
+        // Fields to retrieve necessary information for each video
+<span class="fc" id="L122">        search.setFields(&quot;items(id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/description)&quot;);</span>
+<span class="fc" id="L123">        search.setKey(apiKey);</span>
+
+<span class="fc" id="L125">        SearchListResponse response = search.execute();</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        List&lt;SearchResult&gt; results =  response.getItems() != null ? response.getItems() : List.of();</span>
+<span class="fc" id="L127">        return Converter.convertToChannelVideoData(results, channelId, channelInfo);</span>
+    }
+
+    /**
+     * Retrieves the tags associated with a specific video by its video ID.
+     *
+     * @param videoId the ID of the video whose tags are to be fetched
+     * @return a list of tags associated with the video, or an empty list if no tags exist
+     * @throws IOException if there is an error during the fetch
+     *
+     */
+    public List&lt;String&gt; getVideoTags(String videoId) throws IOException {
+<span class="nc" id="L139">        YouTube.Videos.List request = youtube.videos().list(List.of(&quot;snippet&quot;));</span>
+<span class="nc" id="L140">        request.setId(Collections.singletonList(videoId));</span>
+<span class="nc" id="L141">        request.setKey(apiKey);</span>
+
+<span class="nc" id="L143">        VideoListResponse response = request.execute();</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">        if (response.getItems() != null &amp;&amp; !response.getItems().isEmpty()) {</span>
+<span class="nc" id="L145">            Video video = response.getItems().get(0);</span>
+            // Check for snippet and tags to avoid NullPointerException
+<span class="nc bnc" id="L147" title="All 4 branches missed.">            return video.getSnippet() != null &amp;&amp; video.getSnippet().getTags() != null</span>
+<span class="nc" id="L148">                    ? video.getSnippet().getTags()</span>
+<span class="nc" id="L149">                    : List.of();</span>
+        }
+<span class="nc" id="L151">        return List.of();</span>
+    }
+
+
+    /**
+     * Analyzes the sentiment of the full descriptions of videos based on a search term.
+     *
+     * @param queryTerm the search term to query YouTube for
+     * @param maxResults the maximum number of results to analyze
+     * @return a {@link Sentiment} object containing sentiment analysis results
+     * @throws IOException if there is an error during the sentiment analysis
+     *
+     */
+    public Sentiment getSentimentalAnalysis(String queryTerm, int maxResults) throws IOException {
+
+<span class="fc" id="L166">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, maxResults);</span>
+
+        // Process full descriptions
+<span class="fc" id="L169">        return AnalyseSentiment.analyzeStreamSentiment(</span>
+<span class="fc" id="L170">                videos.stream()</span>
+<span class="fc" id="L171">                        .parallel()</span>
+<span class="fc" id="L172">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="fc" id="L173">                        .collect(Collectors.toList())</span>
+        );
+    }
+
+    /**
+     * Calculates the average Flesch-Kincaid Grade Level for video descriptions based on a query term.
+     *
+     * @param queryTerm The search query term.
+     * @param maxResults The maximum number of results to include in the Flesch-Kincaid analysis.
+     * @return The average Flesch-Kincaid Grade Level score for the video descriptions.
+     * @throws IOException If there is an issue with the YouTube API request.
+     */
+    public double getavgFleshGrade(String queryTerm, int maxResults) throws IOException {
+
+<span class="nc" id="L187">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, maxResults);</span>
+
+        // Process full descriptions
+<span class="nc" id="L190">        return ReadabilityGrade.calculateAverageFleschKincaid(</span>
+<span class="nc" id="L191">                videos.stream()</span>
+<span class="nc" id="L192">                        .parallel()</span>
+<span class="nc" id="L193">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="nc" id="L194">                        .collect(Collectors.toList())</span>
+        );
+    }
+    /**
+     * Calculates the average Flesch Reading Ease score for video descriptions based on a query term.
+     *
+     * @param queryTerm The search query term.
+     * @param maxResults The maximum number of results to include in the Flesch Reading Ease analysis.
+     * @return The average Flesch Reading Ease score for the video descriptions.
+     * @throws IOException If there is an issue with the YouTube API request.
+     */
+    public double getavgFleshScore(String queryTerm, int maxResults) throws IOException {
+
+<span class="nc" id="L207">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, maxResults);</span>
+
+        // Process full descriptions
+<span class="nc" id="L210">        return ReadabilityGrade.calculateAverageFleschReadingEase(</span>
+<span class="nc" id="L211">                videos.stream()</span>
+<span class="nc" id="L212">                        .parallel()</span>
+<span class="nc" id="L213">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="nc" id="L214">                        .collect(Collectors.toList())</span>
+        );
+    }
+
+
+    public double getFleshGrade(String queryTerm, int maxResults) throws IOException {
+
+<span class="nc" id="L221">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, maxResults);</span>
+
+        // Process full descriptions
+<span class="nc" id="L224">        return ReadabilityGrade.calculateFleschKincaidGradeLevel(</span>
+<span class="nc" id="L225">                String.valueOf(videos.stream()</span>
+<span class="nc" id="L226">                        .parallel()</span>
+<span class="nc" id="L227">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="nc" id="L228">                        .collect(Collectors.toList()))</span>
+        );
+    }
+    public double getFleshScore(String queryTerm, int maxResults) throws IOException {
+
+<span class="nc" id="L233">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, maxResults);</span>
+
+        // Process full descriptions
+<span class="nc" id="L236">        return ReadabilityGrade.calculateFleschReadingEase(</span>
+<span class="nc" id="L237">                String.valueOf(videos.stream()</span>
+<span class="nc" id="L238">                        .parallel()</span>
+<span class="nc" id="L239">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="nc" id="L240">                        .collect(Collectors.toList()))</span>
+        );
+    }
+
+
+    /**
+     * Analyzes word statistics based on the full descriptions of videos retrieved by a search term.
+     *
+     * @param queryTerm the search term to query YouTube for
+     * @return a {@link WordStatData} object containing word frequency statistics
+     * @throws IOException if there is an error during the analysis
+     *
+     */
+    public WordStatData getWordStats(String queryTerm) throws IOException {
+<span class="fc" id="L254">        List&lt;Video&gt; videos = getVideosFromSearchTermWithFullDescription(queryTerm, Constants.MAX_DESC_SENTIMENT_COUNT);</span>
+<span class="fc" id="L255">        Map&lt;String,Integer&gt; map =  AnalyseWords.analyzeWordStats(</span>
+<span class="fc" id="L256">                videos.stream()</span>
+<span class="fc" id="L257">                        .parallel()</span>
+<span class="fc" id="L258">                        .map(video -&gt; video.getSnippet().getDescription())</span>
+<span class="fc" id="L259">                        .collect(Collectors.toList()));</span>
+<span class="fc" id="L260">        return new WordStatData(queryTerm, map);</span>
+    }
+
+    /**
+     * Fetches the full description of videos based on a search term.
+     *
+     * @param searchTerm the search term to query YouTube for
+     * @param maxResults the maximum number of videos to retrieve
+     * @return a list of {@link Video} objects corresponding to the search results
+     * @throws IOException if there is an error during the video retrieval
+     *
+     */
+    private List&lt;Video&gt; getVideosFromSearchTermWithFullDescription(String searchTerm, int maxResults) throws IOException {
+<span class="fc" id="L273">        YouTube.Search.List search = youtube.search().list(List.of(&quot;id&quot;, &quot;snippet&quot;));</span>
+<span class="fc" id="L274">        search.setQ(searchTerm);</span>
+<span class="fc" id="L275">        search.setType(List.of(&quot;video&quot;));</span>
+<span class="fc" id="L276">        search.setMaxResults(Long.valueOf(maxResults));</span>
+<span class="fc" id="L277">        search.setOrder(&quot;date&quot;); // Sort by upload date, newest first</span>
+        // Fields to retrieve relevant information including channelId
+<span class="fc" id="L279">        search.setFields(&quot;items(id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/channelTitle,snippet/channelId,snippet/description)&quot;);</span>
+<span class="fc" id="L280">        search.setKey(apiKey);</span>
+<span class="fc" id="L281">        SearchListResponse searchResponse = search.execute();</span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        List&lt;SearchResult&gt; searchResults = searchResponse.getItems() != null ? searchResponse.getItems() : List.of();</span>
+<span class="fc" id="L283">        List&lt;String&gt; videoIds = searchResults.stream().map(result -&gt; result.getId().getVideoId()).collect(Collectors.toList());</span>
+<span class="fc" id="L284">        YouTube.Videos.List videoRequest = youtube.videos().list(List.of(&quot;snippet&quot;));</span>
+<span class="fc" id="L285">        videoRequest.setId(videoIds);</span>
+<span class="fc" id="L286">        videoRequest.setFields(&quot;items(snippet/description)&quot;);</span>
+<span class="fc" id="L287">        videoRequest.setKey(apiKey);</span>
+
+<span class="fc" id="L289">        VideoListResponse videoResponse = videoRequest.execute();</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        return videoResponse.getItems() != null ? videoResponse.getItems() : List.of();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

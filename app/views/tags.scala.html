@@ -1,0 +1,18 @@
+@(videoId: String, tags: List[String])
+
+@main("Video Tags") {
+    <link rel="icon" href="@routes.Assets.versioned("images/img.png")" type="image/png">
+    <link rel="script" href="@routes.Assets.versioned("javascipts/main.js")">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
+
+    <h1>Tags for Video: @videoId</h1>
+    <ul>
+    @for(tag <- tags) {
+        <li>
+            <a href="@routes.HomeController.showVideosByTag(tag)">
+            @tag
+            </a>
+        </li>
+    }
+    </ul>
+}

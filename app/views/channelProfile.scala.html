@@ -1,0 +1,161 @@
+@import models.data.{ChannelMetaData, VideoData}
+@(channelInfo: ChannelMetaData, recentVideos: List[VideoData])
+
+@main("Channel Profile") {
+<link rel="icon" href="@routes.Assets.versioned("images/img.png")" type="image/png">
+<link rel="script" href="@routes.Assets.versioned("javascipts/main.js")">
+
+<style>
+    /* General Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff; /* White background for theme */
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2 {
+        color: #d32f2f; /* Red for headings */
+    }
+
+    a {
+        text-decoration: none;
+        color: #d32f2f; /* Red for links */
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .channel-header {
+        background-color: #fff; /* White background */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .channel-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .channel-description {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .channel-stats p {
+        font-size: 1rem;
+        color: #777;
+        margin: 5px 0;
+    }
+
+    .recent-videos-title {
+        font-size: 2rem;
+        margin: 40px 0 20px 0;
+    }
+
+    .video-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .video-item {
+        display: flex;
+        align-items: center;
+        background-color: #fff; /* White background for video items */
+        border: 1px solid #d32f2f; /* Red border */
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+    }
+
+    .video-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .video-thumbnail {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+        border-right: 1px solid #ddd;
+    }
+
+    .video-info {
+        padding: 15px;
+        flex-grow: 1;
+    }
+
+    .video-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #d32f2f; /* Red for video titles */
+    }
+
+    .video-description {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .tags {
+        padding: 10px;
+        text-align: right;
+        border-top: 1px solid #ddd;
+    }
+
+    .tags-link {
+        font-size: 0.9rem;
+        color: #d32f2f; /* Red for tags links */
+    }
+
+    .tags-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="channel-header">
+    <h1 class="channel-title">@channelInfo.getTitle()</h1>
+    <p class="channel-description">@channelInfo.getDescription()</p>
+    <div class="channel-stats">
+        <p><strong>Subscribers:</strong> @channelInfo.getSubscriberCount()</p>
+        <p><strong>Views:</strong> @channelInfo.getViewCount()</p>
+        <p><strong>Videos:</strong> @channelInfo.getVideoCount()</p>
+    </div>
+</div>
+
+<h2 class="recent-videos-title">Recent Videos</h2>
+<ul class="video-list">
+    @for(video <- recentVideos) {
+    <li class="video-item">
+        <img class="video-thumbnail" src="@video.getThumbnailUrl()" alt="Thumbnail">
+        <div class="video-info">
+            <h3 class="video-title">
+                <a href="@video.getVideoUrl()" target="_blank">@video.getTitle()</a>
+            </h3>
+            <p class="video-description">
+                @if(video.getDescription().nonEmpty) {
+                @video.getDescription()
+                } else {
+                <em>No description available</em>
+                }
+            </p>
+            <div class="tags">
+                <a href="@routes.HomeController.showTags(video.getVideoId())" class="tags-link">View Tags</a>
+            </div>
+        </div>
+    </li>
+    }
+</ul>
+}

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">controllers</a> &gt; <span class="el_source">HomeController.java</span></div><h1>HomeController.java</h1><pre class="source lang-java linenums">package controllers;
+
+import actors.CacheManagerActor;
+import actors.UserActor;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Status;
+import akka.pattern.Patterns;
+import akka.stream.Materializer;
+
+import actors.CacheManagerActor;
+import actors.UserActor;
+import actors.*;
+
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Status;
+import akka.pattern.Patterns;
+import akka.stream.Materializer;
+import models.api.CacheManager;
+import models.api.YouTubeService;
+import models.data.ChannelVideoData;
+import models.data.VideoData;
+import models.data.WordStatData;
+import play.libs.streams.ActorFlow;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
+import play.mvc.WebSocket;
+import scala.concurrent.Future;
+import views.html.channelProfile;
+import views.html.index;
+
+import scala.concurrent.ExecutionContext;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static scala.compat.java8.FutureConverters.toJava;
+
+/**
+ * Controller class responsible for handling HTTP requests and rendering views.
+ */
+public class HomeController extends Controller {
+
+    private final CacheManager cacheManager;
+    private final ActorSystem actorSystem;
+    private final ActorRef cacheManagerActor;
+    private final Materializer materializer;
+
+<span class="fc" id="L58">    private final ConcurrentHashMap&lt;String, ActorRef&gt; sessionActorMap = new ConcurrentHashMap&lt;&gt;();</span>
+
+    /**
+     * Constructor for HomeController.
+     * @param cacheManager An instance of CacheManager for data retrieval and caching.
+     */
+    @Inject
+<span class="fc" id="L65">    public HomeController(com.typesafe.config.Config config, CacheManager cacheManager, ActorSystem actorSystem, Materializer materializer) throws GeneralSecurityException, IOException {</span>
+<span class="fc" id="L66">        this.actorSystem = actorSystem;</span>
+<span class="fc" id="L67">        this.cacheManager = cacheManager;</span>
+<span class="fc" id="L68">        this.cacheManagerActor = actorSystem.actorOf(CacheManagerActor.props(config));</span>
+<span class="fc" id="L69">        this.materializer = materializer;</span>
+
+<span class="fc" id="L71">    }</span>
+
+<span class="fc" id="L73">    private final String SESSION_KEY = &quot;searchedTerm&quot;;</span>
+
+    /**
+     * Renders the index page with search results.
+     * @param request The HTTP request.
+     * @return CompletionStage&lt;Result&gt; rendering the index page.
+     */
+
+        public WebSocket searchWebSocket () {
+<span class="fc" id="L82">            ActorRef supervisorActor = actorSystem.actorOf(</span>
+<span class="fc" id="L83">                    SearchSupervisorActor.props(cacheManagerActor),</span>
+                    &quot;search-supervisor&quot;
+            );
+
+<span class="fc" id="L87">            return WebSocket.Text.accept(request -&gt;</span>
+<span class="nc" id="L88">                    ActorFlow.actorRef(out -&gt; {</span>
+                        // Send message to supervisor to create user actor
+<span class="nc" id="L90">                        supervisorActor.tell(</span>
+                                new SearchSupervisorActor.CreateChildActors(out),
+<span class="nc" id="L92">                                ActorRef.noSender()</span>
+                        );
+<span class="nc" id="L94">                        return UserActor.props(out, cacheManagerActor);</span>
+                    }, actorSystem, materializer)
+            );
+        }
+
+
+        public CompletionStage&lt;Result&gt; index (Http.Request request){
+<span class="fc" id="L101">            return CompletableFuture.completedFuture(</span>
+<span class="fc" id="L102">                    ok(index.render(Collections.emptyList(), request))</span>
+            );
+        }
+
+
+        /**
+         * Displays the profile of a channel with its details and last 10 videos.
+         * @param channelId The ID of the YouTube channel.
+         * @param request The HTTP request.
+         * @return CompletionStage&lt;Result&gt; rendering the channel profile.
+         */
+        public CompletionStage&lt;Result&gt; channelProfile(String channelId, Http.Request request) {
+<span class="fc" id="L114">            return CompletableFuture.supplyAsync(() -&gt; {</span>
+                try {
+                    // Fetch channel results
+<span class="fc" id="L117">                    ChannelVideoData data = cacheManager.getChannelResults(channelId);</span>
+
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                    if (data == null) {</span>
+<span class="fc" id="L120">                        return internalServerError(&quot;Channel data not found.&quot;);</span>
+                    }
+
+                    // Ensure we can safely call getChannelData() and getVideoDataList()
+<span class="fc" id="L124">                    return ok(channelProfile.render(data.getChannelData(), data.getVideoDataList()));</span>
+<span class="fc" id="L125">                } catch (IOException e) {</span>
+                    // Handle IOException and return an internal server error
+<span class="fc" id="L127">                    return internalServerError(&quot;An error occurred while retrieving channel data.&quot;);</span>
+<span class="fc" id="L128">                } catch (Exception e) {</span>
+                    // Catch other unexpected exceptions
+<span class="fc" id="L130">                    return internalServerError(&quot;An unexpected error occurred: &quot; + e.getMessage());</span>
+                }
+            });
+        }
+
+
+
+    /**
+         * Clears the search history from the session.
+         * @param request The HTTP request.
+         * @return CompletionStage&lt;Result&gt; redirecting to the index page after clearing session data.
+         */
+        public CompletionStage&lt;Result&gt; clearHistory (Http.Request request){
+<span class="fc" id="L143">            return CompletableFuture.completedFuture(redirect(&quot;/&quot;).removingFromSession(request, SESSION_KEY));</span>
+        }
+
+        /**
+         * Retrieves word statistics for a given query.
+         * @param query The search query for word statistics.
+         * @return CompletionStage&lt;Result&gt; rendering the word statistics view.
+         */
+        public CompletionStage&lt;Result&gt; getWordStats (String query){
+<span class="fc" id="L152">            return CompletableFuture.supplyAsync(() -&gt; {</span>
+                try {
+<span class="fc" id="L154">                    WordStatData data = cacheManager.getWordStats(query);</span>
+<span class="fc" id="L155">                    return ok(views.html.wordStats.render(data));</span>
+<span class="fc" id="L156">                } catch (IOException e) {</span>
+<span class="fc" id="L157">                    throw new CompletionException(e);</span>
+                }
+            });
+        }
+
+        /**
+         * Displays video tags for a given video.
+         * @param videoId The ID of the video.
+         * @return CompletionStage&lt;Result&gt; rendering the tags view.
+         */
+        public CompletionStage&lt;Result&gt; showTags (String videoId){
+<span class="fc" id="L168">            return CompletableFuture.supplyAsync(() -&gt; {</span>
+                try {
+<span class="fc" id="L170">                    List&lt;String&gt; tags = cacheManager.getVideoTags(videoId);</span>
+<span class="fc" id="L171">                    return ok(views.html.tags.render(videoId, tags));</span>
+<span class="fc" id="L172">                } catch (IOException e) {</span>
+<span class="fc" id="L173">                    return internalServerError(&quot;Error fetching tags: &quot; + e.getMessage());</span>
+                }
+            });
+        }
+
+        /**
+         * Displays videos by a specific tag.
+         * @param tag The tag used for video search.
+         * @return CompletionStage&lt;Result&gt; rendering a list of videos by the tag.
+         */
+        public CompletionStage&lt;Result&gt; showVideosByTag (String tag){
+            final YouTubeService youtubeService;
+            try {
+<span class="nc" id="L186">                youtubeService = new YouTubeService(&quot;AIzaSyBlixVtFM2zVl8Te-hMJp1wgQFJaO8z2YE&quot;);</span>
+<span class="nc" id="L187">            } catch (GeneralSecurityException e) {</span>
+<span class="nc" id="L188">                return CompletableFuture.completedFuture(internalServerError(&quot;Security error while initializing YouTube service: &quot; + e.getMessage()));</span>
+<span class="nc" id="L189">            } catch (IOException e) {</span>
+<span class="nc" id="L190">                return CompletableFuture.completedFuture(internalServerError(&quot;Error initializing YouTube service: &quot; + e.getMessage()));</span>
+<span class="nc" id="L191">            }</span>
+
+<span class="nc" id="L193">            return CompletableFuture.supplyAsync(() -&gt; {</span>
+                try {
+<span class="nc" id="L195">                    List&lt;VideoData&gt; videos = youtubeService.searchVideos(tag, 10);</span>
+<span class="nc" id="L196">                    return ok(views.html.videoList.render(tag, videos));</span>
+<span class="nc" id="L197">                } catch (IOException e) {</span>
+<span class="nc" id="L198">                    return internalServerError(&quot;Error fetching videos: &quot; + e.getMessage());</span>
+                }
+            });
+        }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

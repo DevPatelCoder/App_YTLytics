@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>index.template.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">views.html</a> &gt; <span class="el_source">index.template.scala</span></div><h1>index.template.scala</h1><pre class="source lang-java linenums">
+package views.html
+
+import _root_.play.twirl.api.TwirlFeatureImports._
+import _root_.play.twirl.api.TwirlHelperImports._
+import _root_.play.twirl.api.Html
+import _root_.play.twirl.api.JavaScript
+import _root_.play.twirl.api.Txt
+import _root_.play.twirl.api.Xml
+import models._
+import controllers._
+import play.api.i18n._
+import views.html._
+import play.api.templates.PlayMagic._
+import java.lang._
+import java.util._
+import play.core.j.PlayMagicForJava._
+import play.mvc._
+import play.api.data.Field
+import play.data._
+import play.core.j.PlayFormsMagicForJava._
+import scala.jdk.CollectionConverters._
+/*1.2*/import models.data.VideoSearchData
+/*2.2*/import play.mvc.Http.RequestHeader
+
+<span class="pc" id="L26">object index extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template2[List[VideoSearchData],RequestHeader,play.twirl.api.HtmlFormat.Appendable] {</span>
+
+  /**/
+  def apply/*3.2*/(searchHistory: List[VideoSearchData])(implicit request: RequestHeader):play.twirl.api.HtmlFormat.Appendable = {
+<span class="fc" id="L30">    _display_ {</span>
+      {
+
+
+<span class="fc" id="L34">Seq[Any](format.raw/*3.73*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L36">&quot;&quot;&quot;),format.raw/*5.1*/(&quot;&quot;&quot;&lt;!DOCTYPE html&gt;</span>
+&lt;html lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;UTF-8&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+        &lt;title&gt;YouTube Search Results&lt;/title&gt;
+<span class="fc" id="L42">        &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot;&quot;&quot;),_display_(/*11.39*/routes/*11.45*/.Assets.versioned(&quot;stylesheets/main.css&quot;)),format.raw/*11.86*/(&quot;&quot;&quot;&quot;&gt;</span>
+        &lt;style&gt;
+<span class="fc" id="L44">            body &quot;&quot;&quot;),format.raw/*13.18*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*13.19*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L45">                &quot;&quot;&quot;),format.raw/*14.17*/(&quot;&quot;&quot;font-family: Arial, sans-serif;</span>
+                margin: 0;
+                padding: 0;
+                background-color: #fff; /* White background for the theme */
+                color: #333;
+<span class="fc" id="L50">            &quot;&quot;&quot;),format.raw/*19.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*19.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L51">            &quot;&quot;&quot;),format.raw/*20.13*/(&quot;&quot;&quot;.nav-bar &quot;&quot;&quot;),format.raw/*20.22*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*20.23*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L52">                &quot;&quot;&quot;),format.raw/*21.17*/(&quot;&quot;&quot;display: flex;</span>
+                align-items: center;
+                background-color: #d32f2f; /* Red color for the nav-bar */
+                padding: 10px 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+<span class="fc" id="L57">            &quot;&quot;&quot;),format.raw/*26.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*26.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L58">            &quot;&quot;&quot;),format.raw/*27.13*/(&quot;&quot;&quot;.nav-bar h1 &quot;&quot;&quot;),format.raw/*27.25*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*27.26*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L59">                &quot;&quot;&quot;),format.raw/*28.17*/(&quot;&quot;&quot;margin: 0;</span>
+                color: #fff; /* White text for contrast */
+<span class="fc" id="L61">            &quot;&quot;&quot;),format.raw/*30.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*30.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L62">            &quot;&quot;&quot;),format.raw/*31.13*/(&quot;&quot;&quot;.search-container &quot;&quot;&quot;),format.raw/*31.31*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*31.32*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L63">                &quot;&quot;&quot;),format.raw/*32.17*/(&quot;&quot;&quot;display: flex;</span>
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+<span class="fc" id="L67">            &quot;&quot;&quot;),format.raw/*36.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*36.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L68">            &quot;&quot;&quot;),format.raw/*37.13*/(&quot;&quot;&quot;.search-container form &quot;&quot;&quot;),format.raw/*37.36*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*37.37*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L69">                &quot;&quot;&quot;),format.raw/*38.17*/(&quot;&quot;&quot;display: flex;</span>
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                max-width: 400px;
+<span class="fc" id="L74">            &quot;&quot;&quot;),format.raw/*43.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*43.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L75">            &quot;&quot;&quot;),format.raw/*44.13*/(&quot;&quot;&quot;.search-container input &quot;&quot;&quot;),format.raw/*44.37*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*44.38*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L76">                &quot;&quot;&quot;),format.raw/*45.17*/(&quot;&quot;&quot;padding: 8px 12px;</span>
+                font-size: 14px;
+                border-radius: 25px;
+                border: 1px solid #d32f2f; /* Red border */
+                width: 100%;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+<span class="fc" id="L83">            &quot;&quot;&quot;),format.raw/*52.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*52.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L84">            &quot;&quot;&quot;),format.raw/*53.13*/(&quot;&quot;&quot;.search-container input:focus &quot;&quot;&quot;),format.raw/*53.43*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*53.44*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L85">                &quot;&quot;&quot;),format.raw/*54.17*/(&quot;&quot;&quot;outline: none;</span>
+                border-color: #b71c1c; /* Darker red on focus */
+<span class="fc" id="L87">            &quot;&quot;&quot;),format.raw/*56.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*56.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L88">            &quot;&quot;&quot;),format.raw/*57.13*/(&quot;&quot;&quot;.search-container button &quot;&quot;&quot;),format.raw/*57.38*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*57.39*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L89">                &quot;&quot;&quot;),format.raw/*58.17*/(&quot;&quot;&quot;padding: 8px 12px;</span>
+                font-size: 14px;
+                border-radius: 25px;
+                border: 1px solid #d32f2f;
+                background-color: #d32f2f; /* Red background */
+                color: white;
+                cursor: pointer;
+<span class="fc" id="L96">            &quot;&quot;&quot;),format.raw/*65.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*65.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L97">            &quot;&quot;&quot;),format.raw/*66.13*/(&quot;&quot;&quot;.search-container button:hover &quot;&quot;&quot;),format.raw/*66.44*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*66.45*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L98">                &quot;&quot;&quot;),format.raw/*67.17*/(&quot;&quot;&quot;background-color: #b71c1c; /* Darker red on hover */</span>
+<span class="fc" id="L99">            &quot;&quot;&quot;),format.raw/*68.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*68.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L100">            &quot;&quot;&quot;),format.raw/*69.13*/(&quot;&quot;&quot;.history-container &quot;&quot;&quot;),format.raw/*69.32*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*69.33*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L101">                &quot;&quot;&quot;),format.raw/*70.17*/(&quot;&quot;&quot;max-width: 800px;</span>
+                margin: 0 auto;
+                padding: 20px;
+<span class="fc" id="L104">            &quot;&quot;&quot;),format.raw/*73.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*73.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L105">            &quot;&quot;&quot;),format.raw/*74.13*/(&quot;&quot;&quot;.search-history-list &quot;&quot;&quot;),format.raw/*74.34*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*74.35*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L106">                &quot;&quot;&quot;),format.raw/*75.17*/(&quot;&quot;&quot;list-style-type: none;</span>
+                padding: 0;
+<span class="fc" id="L108">            &quot;&quot;&quot;),format.raw/*77.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*77.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L109">            &quot;&quot;&quot;),format.raw/*78.13*/(&quot;&quot;&quot;.search-history-list &gt; li &quot;&quot;&quot;),format.raw/*78.39*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*78.40*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L110">                &quot;&quot;&quot;),format.raw/*79.17*/(&quot;&quot;&quot;background-color: #fff; /* White background for items */</span>
+                border: 1px solid #d32f2f; /* Red border for emphasis */
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+<span class="fc" id="L116">            &quot;&quot;&quot;),format.raw/*85.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*85.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L117">            &quot;&quot;&quot;),format.raw/*86.13*/(&quot;&quot;&quot;.video-list &quot;&quot;&quot;),format.raw/*86.25*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*86.26*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L118">                &quot;&quot;&quot;),format.raw/*87.17*/(&quot;&quot;&quot;list-style-type: none;</span>
+                padding: 0;
+<span class="fc" id="L120">            &quot;&quot;&quot;),format.raw/*89.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*89.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L121">            &quot;&quot;&quot;),format.raw/*90.13*/(&quot;&quot;&quot;.video-card &quot;&quot;&quot;),format.raw/*90.25*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*90.26*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L122">                &quot;&quot;&quot;),format.raw/*91.17*/(&quot;&quot;&quot;display: flex;</span>
+                margin-bottom: 15px;
+                background-color: #fff; /* White background for video cards */
+                border: 1px solid #d32f2f; /* Red border */
+                border-radius: 8px;
+                overflow: hidden;
+<span class="fc" id="L128">            &quot;&quot;&quot;),format.raw/*97.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*97.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L129">            &quot;&quot;&quot;),format.raw/*98.13*/(&quot;&quot;&quot;.video-card img &quot;&quot;&quot;),format.raw/*98.29*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*98.30*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L130">                &quot;&quot;&quot;),format.raw/*99.17*/(&quot;&quot;&quot;width: 200px;</span>
+                height: 150px;
+                object-fit: cover;
+<span class="fc" id="L133">            &quot;&quot;&quot;),format.raw/*102.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*102.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L134">            &quot;&quot;&quot;),format.raw/*103.13*/(&quot;&quot;&quot;.video-info &quot;&quot;&quot;),format.raw/*103.25*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*103.26*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L135">                &quot;&quot;&quot;),format.raw/*104.17*/(&quot;&quot;&quot;padding: 10px;</span>
+                flex-grow: 1;
+<span class="fc" id="L137">            &quot;&quot;&quot;),format.raw/*106.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*106.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L138">            &quot;&quot;&quot;),format.raw/*107.13*/(&quot;&quot;&quot;.video-info a &quot;&quot;&quot;),format.raw/*107.27*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*107.28*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L139">                &quot;&quot;&quot;),format.raw/*108.17*/(&quot;&quot;&quot;color: #d32f2f; /* Red for links */</span>
+                text-decoration: none;
+<span class="fc" id="L141">            &quot;&quot;&quot;),format.raw/*110.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*110.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L142">            &quot;&quot;&quot;),format.raw/*111.13*/(&quot;&quot;&quot;.video-info a:hover &quot;&quot;&quot;),format.raw/*111.33*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*111.34*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L143">                &quot;&quot;&quot;),format.raw/*112.17*/(&quot;&quot;&quot;text-decoration: underline;</span>
+<span class="fc" id="L144">            &quot;&quot;&quot;),format.raw/*113.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*113.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L145">            &quot;&quot;&quot;),format.raw/*114.13*/(&quot;&quot;&quot;#loading-indicator &quot;&quot;&quot;),format.raw/*114.32*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*114.33*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L146">                &quot;&quot;&quot;),format.raw/*115.17*/(&quot;&quot;&quot;color: #d32f2f; /* Red text for loading indicator */</span>
+                display: none;
+<span class="fc" id="L148">            &quot;&quot;&quot;),format.raw/*117.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*117.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L149">            &quot;&quot;&quot;),format.raw/*118.13*/(&quot;&quot;&quot;#error-container &quot;&quot;&quot;),format.raw/*118.30*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*118.31*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L150">                &quot;&quot;&quot;),format.raw/*119.17*/(&quot;&quot;&quot;color: #b71c1c; /* Darker red for errors */</span>
+<span class="fc" id="L151">            &quot;&quot;&quot;),format.raw/*120.13*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*120.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L152">        &quot;&quot;&quot;),format.raw/*121.9*/(&quot;&quot;&quot;&lt;/style&gt;</span>
+
+    &lt;/head&gt;
+    &lt;body&gt;
+            &lt;!-- Navigation Bar --&gt;
+        &lt;div class=&quot;nav-bar&quot;&gt;
+            &lt;h1&gt;Welcome To YTLytics&lt;/h1&gt;
+        &lt;/div&gt;
+
+            &lt;!-- Search Container --&gt;
+        &lt;div class=&quot;search-container&quot;&gt;
+            &lt;form id=&quot;searchForm&quot;&gt;
+                &lt;input type=&quot;text&quot; id=&quot;searchQuery&quot; placeholder=&quot;Search Query...&quot; required&gt;
+                &lt;button type=&quot;submit&quot;&gt;Search&lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+
+            &lt;!-- Loading and Error Indicators --&gt;
+        &lt;div id=&quot;loading-indicator&quot;&gt;
+            Searching... Please wait for a reasonable time
+        &lt;/div&gt;
+        &lt;div id=&quot;error-container&quot;&gt;&lt;/div&gt;
+
+            &lt;!-- Results Container --&gt;
+        &lt;div class=&quot;history-container&quot; id=&quot;results-container&quot;&gt;
+<span class="fc" id="L177">            &quot;&quot;&quot;),format.raw/*146.51*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L178">            &quot;&quot;&quot;),_display_(/*147.14*/for(history &lt;- searchHistory) yield /*147.43*/ {_display_(Seq[Any](format.raw/*147.45*/(&quot;&quot;&quot;</span>
+                &quot;&quot;&quot;),_display_(if(history != null &amp;&amp; history.getVideos() != null &amp;&amp; !history.getVideos().isEmpty())/*148.102*/ {_display_(Seq[Any](format.raw/*148.104*/(&quot;&quot;&quot;
+                    &quot;&quot;&quot;),format.raw/*149.21*/(&quot;&quot;&quot;&lt;div class=&quot;result-item&quot;&gt;
+                        &lt;h3&gt;Query: &quot;&quot;&quot;),_display_(/*150.37*/history/*150.44*/.getQuery()),format.raw/*150.55*/(&quot;&quot;&quot;&lt;/h3&gt;
+                        &lt;p&gt;Sentiment: &quot;&quot;&quot;),_display_(/*151.40*/history/*151.47*/.getSentiment()),format.raw/*151.62*/(&quot;&quot;&quot;&lt;/p&gt;
+                        &lt;p&gt;FleshKincidan Grade: &quot;&quot;&quot;),_display_(/*152.50*/history/*152.57*/.getAvgFleshGrad()),format.raw/*152.75*/(&quot;&quot;&quot;&lt;/p&gt;
+                        &lt;p&gt;Flesh Read Ease Score: &quot;&quot;&quot;),_display_(/*153.52*/history/*153.59*/.getAvgFleshScore()),format.raw/*153.78*/(&quot;&quot;&quot;&lt;/p&gt;
+                        &quot;&quot;&quot;),_display_(/*154.26*/for(video &lt;- history.getVideos()) yield /*154.59*/ {_display_(Seq[Any](format.raw/*154.61*/(&quot;&quot;&quot;
+                            &quot;&quot;&quot;),format.raw/*155.29*/(&quot;&quot;&quot;&lt;div class=&quot;video-item&quot;&gt;
+                                &lt;h4&gt;&quot;&quot;&quot;),_display_(/*156.38*/video/*156.43*/.getTitle()),format.raw/*156.54*/(&quot;&quot;&quot;&lt;/h4&gt;
+                                &lt;p&gt;Channel: &quot;&quot;&quot;),_display_(/*157.46*/video/*157.51*/.getChannelTitle()),format.raw/*157.69*/(&quot;&quot;&quot;&lt;/p&gt;
+                            &lt;/div&gt;
+                        &quot;&quot;&quot;)))}),format.raw/*159.26*/(&quot;&quot;&quot;
+                    &quot;&quot;&quot;),format.raw/*160.21*/(&quot;&quot;&quot;&lt;/div&gt;
+                &quot;&quot;&quot;)))} else {null} ),format.raw/*161.18*/(&quot;&quot;&quot;
+<span class="fc" id="L193">            &quot;&quot;&quot;)))}),format.raw/*162.14*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L194">        &quot;&quot;&quot;),format.raw/*163.9*/(&quot;&quot;&quot;&lt;/div&gt;</span>
+
+        &lt;script&gt;
+<span class="fc" id="L197">                document.addEventListener('DOMContentLoaded', () =&gt; &quot;&quot;&quot;),format.raw/*166.69*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*166.70*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L198">                    &quot;&quot;&quot;),format.raw/*167.21*/(&quot;&quot;&quot;const searchForm = document.getElementById('searchForm');</span>
+                    const searchQuery = document.getElementById('searchQuery');
+                    const resultsContainer = document.getElementById('results-container');
+                    const loadingIndicator = document.getElementById('loading-indicator');
+                    const errorContainer = document.getElementById('error-container');
+                    let socket = null;
+
+                    // WebSocket URL from routes
+<span class="fc" id="L206">                    const wsUrl = &quot;&quot;&quot;&quot;),_display_(/*175.37*/routes/*175.43*/.HomeController.searchWebSocket().webSocketURL()),format.raw/*175.91*/(&quot;&quot;&quot;&quot;;</span>
+
+<span class="fc" id="L208">                    function initWebSocket() &quot;&quot;&quot;),format.raw/*177.46*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*177.47*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L209">                        &quot;&quot;&quot;),format.raw/*178.25*/(&quot;&quot;&quot;// Create WebSocket connection</span>
+                        socket = new WebSocket(wsUrl);
+
+<span class="fc" id="L212">                        socket.onopen = () =&gt; &quot;&quot;&quot;),format.raw/*181.47*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*181.48*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L213">                            &quot;&quot;&quot;),format.raw/*182.29*/(&quot;&quot;&quot;console.log('WebSocket connection established');</span>
+                            errorContainer.textContent = ''; // Clear any previous errors
+<span class="fc" id="L215">                        &quot;&quot;&quot;),format.raw/*184.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*184.26*/(&quot;&quot;&quot;;</span>
+
+<span class="fc" id="L217">                        socket.onmessage = (event) =&gt; &quot;&quot;&quot;),format.raw/*186.55*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*186.56*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L218">                            &quot;&quot;&quot;),format.raw/*187.29*/(&quot;&quot;&quot;try &quot;&quot;&quot;),format.raw/*187.33*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*187.34*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L219">                                &quot;&quot;&quot;),format.raw/*188.33*/(&quot;&quot;&quot;const data = JSON.parse(event.data);</span>
+                                displaySearchResults(data);
+<span class="fc" id="L221">                            &quot;&quot;&quot;),format.raw/*190.29*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*190.30*/(&quot;&quot;&quot; &quot;&quot;&quot;),format.raw/*190.31*/(&quot;&quot;&quot;catch (error) &quot;&quot;&quot;),format.raw/*190.45*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*190.46*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L222">                                &quot;&quot;&quot;),format.raw/*191.33*/(&quot;&quot;&quot;console.error('Error parsing message:', error);</span>
+                                errorContainer.textContent = 'Error processing search results';
+<span class="fc" id="L224">                            &quot;&quot;&quot;),format.raw/*193.29*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*193.30*/(&quot;&quot;&quot; &quot;&quot;&quot;),format.raw/*193.31*/(&quot;&quot;&quot;finally &quot;&quot;&quot;),format.raw/*193.39*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*193.40*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L225">                                &quot;&quot;&quot;),format.raw/*194.33*/(&quot;&quot;&quot;loadingIndicator.style.display = 'none';</span>
+<span class="fc" id="L226">                            &quot;&quot;&quot;),format.raw/*195.29*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*195.30*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L227">                        &quot;&quot;&quot;),format.raw/*196.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*196.26*/(&quot;&quot;&quot;;</span>
+
+<span class="fc" id="L229">                        socket.onclose = (event) =&gt; &quot;&quot;&quot;),format.raw/*198.53*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*198.54*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L230">                            &quot;&quot;&quot;),format.raw/*199.29*/(&quot;&quot;&quot;console.log('WebSocket connection closed');</span>
+                            errorContainer.textContent = 'WebSocket disconnected. Reconnecting...';
+                            // Attempt to reconnect
+                            setTimeout(initWebSocket, 3000);
+<span class="fc" id="L234">                        &quot;&quot;&quot;),format.raw/*203.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*203.26*/(&quot;&quot;&quot;;</span>
+
+<span class="fc" id="L236">                        socket.onerror = (error) =&gt; &quot;&quot;&quot;),format.raw/*205.53*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*205.54*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L237">                            &quot;&quot;&quot;),format.raw/*206.29*/(&quot;&quot;&quot;console.error('WebSocket error:', error);</span>
+                            errorContainer.textContent = 'WebSocket connection error';
+                            loadingIndicator.style.display = 'none';
+<span class="fc" id="L240">                        &quot;&quot;&quot;),format.raw/*209.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*209.26*/(&quot;&quot;&quot;;</span>
+<span class="fc" id="L241">                    &quot;&quot;&quot;),format.raw/*210.21*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*210.22*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L243">                    &quot;&quot;&quot;),format.raw/*212.21*/(&quot;&quot;&quot;let searchResultsCount = 0;</span>
+                    const MAX_SEARCH_RESULTS = 10;
+
+<span class="fc" id="L246">                    function displaySearchResults(searchData) &quot;&quot;&quot;),format.raw/*215.63*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*215.64*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L247">                        &quot;&quot;&quot;),format.raw/*216.25*/(&quot;&quot;&quot;// Check if search data is valid</span>
+<span class="fc" id="L248">                        if (!searchData || !searchData.videos || searchData.videos.length === 0) &quot;&quot;&quot;),format.raw/*217.98*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*217.99*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L249">                            &quot;&quot;&quot;),format.raw/*218.29*/(&quot;&quot;&quot;resultsContainer.innerHTML += '&lt;p&gt;No results found&lt;/p&gt;';</span>
+                            return;
+<span class="fc" id="L251">                        &quot;&quot;&quot;),format.raw/*220.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*220.26*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L253">                        &quot;&quot;&quot;),format.raw/*222.25*/(&quot;&quot;&quot;// Remove existing result with the same query if present</span>
+                        const existingResults = resultsContainer.querySelectorAll('.result-item');
+<span class="fc" id="L255">                        existingResults.forEach(item =&gt; &quot;&quot;&quot;),format.raw/*224.57*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*224.58*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L256">                            &quot;&quot;&quot;),format.raw/*225.29*/(&quot;&quot;&quot;const queryHeader = item.querySelector('h3');</span>
+<span class="fc" id="L257">                            if (queryHeader &amp;&amp; queryHeader.textContent === `Query: $&quot;&quot;&quot;),format.raw/*226.85*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*226.86*/(&quot;&quot;&quot;searchData.query&quot;&quot;&quot;),format.raw/*226.102*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*226.103*/(&quot;&quot;&quot;`) &quot;&quot;&quot;),format.raw/*226.106*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*226.107*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L258">                                &quot;&quot;&quot;),format.raw/*227.33*/(&quot;&quot;&quot;resultsContainer.removeChild(item);</span>
+                                searchResultsCount--; // Decrement count as we're removing an item
+<span class="fc" id="L260">                            &quot;&quot;&quot;),format.raw/*229.29*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*229.30*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L261">                        &quot;&quot;&quot;),format.raw/*230.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*230.26*/(&quot;&quot;&quot;);</span>
+
+                        // Create result item
+                        const resultItem = document.createElement('div');
+                        resultItem.classList.add('result-item');
+
+                        // Add query and sentiment
+                        const queryHeader = document.createElement('h3');
+<span class="fc" id="L269">                        queryHeader.textContent = `Query: $&quot;&quot;&quot;),format.raw/*238.60*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*238.61*/(&quot;&quot;&quot;searchData.query&quot;&quot;&quot;),format.raw/*238.77*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*238.78*/(&quot;&quot;&quot;`;</span>
+                        resultItem.appendChild(queryHeader);
+
+                        const sentimentPara = document.createElement('p');
+<span class="fc" id="L273">                        sentimentPara.textContent = `Sentiment: $&quot;&quot;&quot;),format.raw/*242.66*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*242.67*/(&quot;&quot;&quot;searchData.sentiment || 'N/A'&quot;&quot;&quot;),format.raw/*242.96*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*242.97*/(&quot;&quot;&quot;`;</span>
+                        resultItem.appendChild(sentimentPara);
+
+                        // Add Flesch-Kincaid and Flesch Reading Ease scores
+<span class="fc" id="L277">                        if (searchData.fleschKincaidGrade !== undefined) &quot;&quot;&quot;),format.raw/*246.74*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*246.75*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L278">                            &quot;&quot;&quot;),format.raw/*247.29*/(&quot;&quot;&quot;const fleschGradePara = document.createElement('p');</span>
+<span class="fc" id="L279">                            fleschGradePara.textContent = `Flesch-Kincaid Grade: $&quot;&quot;&quot;),format.raw/*248.83*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*248.84*/(&quot;&quot;&quot;searchData.fleschKincaidGrade.toFixed(2)&quot;&quot;&quot;),format.raw/*248.124*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*248.125*/(&quot;&quot;&quot;`;</span>
+                            resultItem.appendChild(fleschGradePara);
+<span class="fc" id="L281">                        &quot;&quot;&quot;),format.raw/*250.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*250.26*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L283">                        &quot;&quot;&quot;),format.raw/*252.25*/(&quot;&quot;&quot;if (searchData.fleschReadingEase !== undefined) &quot;&quot;&quot;),format.raw/*252.73*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*252.74*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L284">                            &quot;&quot;&quot;),format.raw/*253.29*/(&quot;&quot;&quot;const fleschEasePara = document.createElement('p');</span>
+<span class="fc" id="L285">                            fleschEasePara.textContent = `Flesch Reading Ease: $&quot;&quot;&quot;),format.raw/*254.81*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*254.82*/(&quot;&quot;&quot;searchData.fleschReadingEase.toFixed(2)&quot;&quot;&quot;),format.raw/*254.121*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*254.122*/(&quot;&quot;&quot;`;</span>
+                            resultItem.appendChild(fleschEasePara);
+<span class="fc" id="L287">                        &quot;&quot;&quot;),format.raw/*256.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*256.26*/(&quot;&quot;&quot;</span>
+
+
+<span class="fc" id="L290">                        &quot;&quot;&quot;),format.raw/*259.25*/(&quot;&quot;&quot;// Add videos</span>
+                        const videoList = document.createElement('ul');
+                        videoList.classList.add('video-list');
+
+<span class="fc" id="L294">                        searchData.videos.forEach(video =&gt; &quot;&quot;&quot;),format.raw/*263.60*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*263.61*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L295">                            &quot;&quot;&quot;),format.raw/*264.29*/(&quot;&quot;&quot;const videoItem = document.createElement('li');</span>
+                            videoItem.classList.add('video-card');
+
+                            // Video thumbnail
+                            const thumbnailImg = document.createElement('img');
+                            thumbnailImg.src = video.thumbnailUrl || '/placeholder-thumbnail.jpg';
+                            thumbnailImg.alt = 'Video Thumbnail';
+
+                            // Video info container
+                            const videoInfo = document.createElement('div');
+                            videoInfo.classList.add('video-info');
+
+                            const videoTitle = document.createElement('h4');
+                            const videoTitleLink = document.createElement('a');
+                            videoTitleLink.href = video.videoUrl || '#';
+                            videoTitleLink.target = '_blank';
+                            videoTitleLink.textContent = video.title;
+                            videoTitle.appendChild(videoTitleLink);
+
+                            const channelPara = document.createElement('p');
+                            const channelLink = document.createElement('a');
+<span class="fc" id="L316">                            channelLink.href = `/channel/$&quot;&quot;&quot;),format.raw/*285.59*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*285.60*/(&quot;&quot;&quot;video.channelId&quot;&quot;&quot;),format.raw/*285.75*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*285.76*/(&quot;&quot;&quot;`;</span>
+                            channelLink.target = '_blank';
+<span class="fc" id="L318">                            channelLink.textContent = `Channel: $&quot;&quot;&quot;),format.raw/*287.66*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*287.67*/(&quot;&quot;&quot;video.channelTitle&quot;&quot;&quot;),format.raw/*287.85*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*287.86*/(&quot;&quot;&quot;`;</span>
+                            channelPara.appendChild(channelLink);
+
+                            const descriptionPara = document.createElement('p');
+<span class="fc" id="L322">                            descriptionPara.textContent = `Description: $&quot;&quot;&quot;),format.raw/*291.74*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*291.75*/(&quot;&quot;&quot;video.description || 'No description'&quot;&quot;&quot;),format.raw/*291.112*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*291.113*/(&quot;&quot;&quot;`;</span>
+
+                            const tagLink = document.createElement('p');
+                            const tagsAnchor = document.createElement('a');
+<span class="fc" id="L326">                            tagsAnchor.href = `/tags/$&quot;&quot;&quot;),format.raw/*295.55*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*295.56*/(&quot;&quot;&quot;video.videoId&quot;&quot;&quot;),format.raw/*295.69*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*295.70*/(&quot;&quot;&quot;`;</span>
+                            tagsAnchor.textContent = 'Tags';
+                            tagLink.appendChild(tagsAnchor);
+
+                            videoInfo.appendChild(videoTitle);
+                            videoInfo.appendChild(channelPara);
+                            videoInfo.appendChild(descriptionPara);
+                            videoInfo.appendChild(tagLink);
+
+                            videoItem.appendChild(thumbnailImg);
+                            videoItem.appendChild(videoInfo);
+
+                            videoList.appendChild(videoItem);
+<span class="fc" id="L339">                        &quot;&quot;&quot;),format.raw/*308.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*308.26*/(&quot;&quot;&quot;);</span>
+
+                        resultItem.appendChild(videoList);
+
+                        // Insert new result at the top of the container
+<span class="fc" id="L344">                        if (resultsContainer.firstChild) &quot;&quot;&quot;),format.raw/*313.58*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*313.59*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L345">                            &quot;&quot;&quot;),format.raw/*314.29*/(&quot;&quot;&quot;resultsContainer.insertBefore(resultItem, resultsContainer.firstChild);</span>
+<span class="fc" id="L346">                        &quot;&quot;&quot;),format.raw/*315.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*315.26*/(&quot;&quot;&quot; &quot;&quot;&quot;),format.raw/*315.27*/(&quot;&quot;&quot;else &quot;&quot;&quot;),format.raw/*315.32*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*315.33*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L347">                            &quot;&quot;&quot;),format.raw/*316.29*/(&quot;&quot;&quot;resultsContainer.appendChild(resultItem);</span>
+<span class="fc" id="L348">                        &quot;&quot;&quot;),format.raw/*317.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*317.26*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L350">                        &quot;&quot;&quot;),format.raw/*319.25*/(&quot;&quot;&quot;// Increment search results count</span>
+                        searchResultsCount++;
+
+                        // If we exceed max results, remove from the bottom
+<span class="fc" id="L354">                        if (searchResultsCount &gt; MAX_SEARCH_RESULTS) &quot;&quot;&quot;),format.raw/*323.70*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*323.71*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L355">                            &quot;&quot;&quot;),format.raw/*324.29*/(&quot;&quot;&quot;resultsContainer.removeChild(resultsContainer.lastElementChild);</span>
+                            searchResultsCount = MAX_SEARCH_RESULTS;
+<span class="fc" id="L357">                        &quot;&quot;&quot;),format.raw/*326.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*326.26*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L358">                    &quot;&quot;&quot;),format.raw/*327.21*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*327.22*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L359">                    &quot;&quot;&quot;),format.raw/*328.21*/(&quot;&quot;&quot;// Initialize WebSocket on page load</span>
+                    initWebSocket();
+
+                    // Search form submission
+<span class="fc" id="L363">                    searchForm.addEventListener('submit', (e) =&gt; &quot;&quot;&quot;),format.raw/*332.66*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*332.67*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L364">                        &quot;&quot;&quot;),format.raw/*333.25*/(&quot;&quot;&quot;e.preventDefault();</span>
+                        const query = searchQuery.value.trim();
+
+<span class="fc" id="L367">                        if (!query) &quot;&quot;&quot;),format.raw/*336.37*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*336.38*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L368">                            &quot;&quot;&quot;),format.raw/*337.29*/(&quot;&quot;&quot;errorContainer.textContent = 'Please enter a search term';</span>
+                            return;
+<span class="fc" id="L370">                        &quot;&quot;&quot;),format.raw/*339.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*339.26*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L372">                        &quot;&quot;&quot;),format.raw/*341.25*/(&quot;&quot;&quot;if (!socket || socket.readyState !== WebSocket.OPEN) &quot;&quot;&quot;),format.raw/*341.78*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*341.79*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L373">                            &quot;&quot;&quot;),format.raw/*342.29*/(&quot;&quot;&quot;errorContainer.textContent = 'WebSocket is not connected. Please try again.';</span>
+                            return;
+<span class="fc" id="L375">                        &quot;&quot;&quot;),format.raw/*344.25*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*344.26*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L377">                        &quot;&quot;&quot;),format.raw/*346.25*/(&quot;&quot;&quot;// Show loading indicator</span>
+                        loadingIndicator.style.display = 'block';
+                        errorContainer.textContent = '';
+
+                        // Send search query via WebSocket
+                        socket.send(query);
+                        // Clear input after sending
+                        searchQuery.value = '';
+<span class="fc" id="L385">                    &quot;&quot;&quot;),format.raw/*354.21*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*354.22*/(&quot;&quot;&quot;);</span>
+<span class="fc" id="L386">                &quot;&quot;&quot;),format.raw/*355.17*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*355.18*/(&quot;&quot;&quot;);</span>
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;&quot;&quot;&quot;))
+      }
+    }
+  }
+
+<span class="fc" id="L394">  def render(searchHistory:List[VideoSearchData],request:RequestHeader): play.twirl.api.HtmlFormat.Appendable = apply(searchHistory)(request)</span>
+
+<span class="nc" id="L396">  def f:((List[VideoSearchData]) =&gt; (RequestHeader) =&gt; play.twirl.api.HtmlFormat.Appendable) = (searchHistory) =&gt; (request) =&gt; apply(searchHistory)(request)</span>
+
+<span class="nc" id="L398">  def ref: this.type = this</span>
+
+}
+
+
+              /*
+                  -- GENERATED --
+                  SOURCE: app/views/index.scala.html
+                  HASH: 6050b25c0d2478b7ed155eef8da35ece297f3f2b
+                  MATRIX: 610-&gt;1|652-&gt;38|1020-&gt;75|1186-&gt;146|1216-&gt;150|1487-&gt;394|1502-&gt;400|1564-&gt;441|1630-&gt;479|1659-&gt;480|1705-&gt;498|1943-&gt;708|1972-&gt;709|2014-&gt;723|2051-&gt;732|2080-&gt;733|2126-&gt;751|2392-&gt;989|2421-&gt;990|2463-&gt;1004|2503-&gt;1016|2532-&gt;1017|2578-&gt;1035|2690-&gt;1119|2719-&gt;1120|2761-&gt;1134|2807-&gt;1152|2836-&gt;1153|2882-&gt;1171|3050-&gt;1311|3079-&gt;1312|3121-&gt;1326|3172-&gt;1349|3201-&gt;1350|3247-&gt;1368|3447-&gt;1540|3476-&gt;1541|3518-&gt;1555|3570-&gt;1579|3599-&gt;1580|3645-&gt;1598|3947-&gt;1872|3976-&gt;1873|4018-&gt;1887|4076-&gt;1917|4105-&gt;1918|4151-&gt;1936|4273-&gt;2030|4302-&gt;2031|4344-&gt;2045|4397-&gt;2070|4426-&gt;2071|4472-&gt;2089|4778-&gt;2367|4807-&gt;2368|4849-&gt;2382|4908-&gt;2413|4937-&gt;2414|4983-&gt;2432|5077-&gt;2498|5106-&gt;2499|5148-&gt;2513|5195-&gt;2532|5224-&gt;2533|5270-&gt;2551|5394-&gt;2647|5423-&gt;2648|5465-&gt;2662|5514-&gt;2683|5543-&gt;2684|5589-&gt;2702|5682-&gt;2767|5711-&gt;2768|5753-&gt;2782|5807-&gt;2808|5836-&gt;2809|5882-&gt;2827|6220-&gt;3137|6249-&gt;3138|6291-&gt;3152|6331-&gt;3164|6360-&gt;3165|6406-&gt;3183|6499-&gt;3248|6528-&gt;3249|6570-&gt;3263|6610-&gt;3275|6639-&gt;3276|6685-&gt;3294|6992-&gt;3573|7021-&gt;3574|7063-&gt;3588|7107-&gt;3604|7136-&gt;3605|7182-&gt;3623|7306-&gt;3718|7336-&gt;3719|7379-&gt;3733|7420-&gt;3745|7450-&gt;3746|7497-&gt;3764|7585-&gt;3823|7615-&gt;3824|7658-&gt;3838|7701-&gt;3852|7731-&gt;3853|7778-&gt;3871|7896-&gt;3960|7926-&gt;3961|7969-&gt;3975|8018-&gt;3995|8048-&gt;3996|8095-&gt;4014|8165-&gt;4055|8195-&gt;4056|8238-&gt;4070|8286-&gt;4089|8316-&gt;4090|8363-&gt;4108|8490-&gt;4206|8520-&gt;4207|8563-&gt;4221|8609-&gt;4238|8639-&gt;4239|8686-&gt;4257|8772-&gt;4314|8802-&gt;4315|8840-&gt;4325|9661-&gt;5155|9704-&gt;5170|9750-&gt;5199|9791-&gt;5201|9923-&gt;5304|9965-&gt;5306|10016-&gt;5328|10107-&gt;5391|10124-&gt;5398|10157-&gt;5409|10231-&gt;5455|10248-&gt;5462|10285-&gt;5477|10368-&gt;5532|10385-&gt;5539|10425-&gt;5557|10510-&gt;5614|10527-&gt;5621|10568-&gt;5640|10627-&gt;5671|10677-&gt;5704|10718-&gt;5706|10777-&gt;5736|10868-&gt;5799|10883-&gt;5804|10916-&gt;5815|10996-&gt;5867|11011-&gt;5872|11051-&gt;5890|11150-&gt;5957|11201-&gt;5979|11271-&gt;6004|11318-&gt;6019|11356-&gt;6029|11481-&gt;6125|11511-&gt;6126|11562-&gt;6148|12130-&gt;6688|12146-&gt;6694|12216-&gt;6742|12296-&gt;6793|12326-&gt;6794|12381-&gt;6820|12546-&gt;6956|12576-&gt;6957|12635-&gt;6987|12829-&gt;7152|12859-&gt;7153|12947-&gt;7212|12977-&gt;7213|13036-&gt;7243|13069-&gt;7247|13099-&gt;7248|13162-&gt;7282|13318-&gt;7409|13348-&gt;7410|13378-&gt;7411|13421-&gt;7425|13451-&gt;7426|13514-&gt;7460|13717-&gt;7634|13747-&gt;7635|13777-&gt;7636|13814-&gt;7644|13844-&gt;7645|13907-&gt;7679|14006-&gt;7749|14036-&gt;7750|14091-&gt;7776|14121-&gt;7777|14207-&gt;7834|14237-&gt;7835|14296-&gt;7865|14610-&gt;8150|14640-&gt;8151|14726-&gt;8208|14756-&gt;8209|14815-&gt;8239|15069-&gt;8464|15099-&gt;8465|15151-&gt;8488|15181-&gt;8489|15234-&gt;8513|15408-&gt;8658|15438-&gt;8659|15493-&gt;8685|15653-&gt;8816|15683-&gt;8817|15742-&gt;8847|15890-&gt;8966|15920-&gt;8967|15977-&gt;8995|16220-&gt;9209|16250-&gt;9210|16309-&gt;9240|16469-&gt;9371|16499-&gt;9372|16545-&gt;9388|16576-&gt;9389|16609-&gt;9392|16640-&gt;9393|16703-&gt;9427|16897-&gt;9592|16927-&gt;9593|16982-&gt;9619|17012-&gt;9620|17423-&gt;10002|17453-&gt;10003|17498-&gt;10019|17528-&gt;10020|17766-&gt;10229|17796-&gt;10230|17854-&gt;10259|17884-&gt;10260|18134-&gt;10481|18164-&gt;10482|18223-&gt;10512|18388-&gt;10648|18418-&gt;10649|18488-&gt;10689|18519-&gt;10690|18646-&gt;10788|18676-&gt;10789|18733-&gt;10817|18810-&gt;10865|18840-&gt;10866|18899-&gt;10896|19061-&gt;11029|19091-&gt;11030|19160-&gt;11069|19191-&gt;11070|19317-&gt;11167|19347-&gt;11168|19406-&gt;11198|19648-&gt;11411|19678-&gt;11412|19737-&gt;11442|21036-&gt;12712|21066-&gt;12713|21110-&gt;12728|21140-&gt;12729|21298-&gt;12858|21328-&gt;12859|21375-&gt;12877|21405-&gt;12878|21662-&gt;13106|21692-&gt;13107|21759-&gt;13144|21790-&gt;13145|22030-&gt;13356|22060-&gt;13357|22102-&gt;13370|22132-&gt;13371|22770-&gt;13980|22800-&gt;13981|23028-&gt;14180|23058-&gt;14181|23117-&gt;14211|23243-&gt;14308|23273-&gt;14309|23303-&gt;14310|23337-&gt;14315|23367-&gt;14316|23426-&gt;14346|23522-&gt;14413|23552-&gt;14414|23609-&gt;14442|23868-&gt;14672|23898-&gt;14673|23957-&gt;14703|24146-&gt;14863|24176-&gt;14864|24227-&gt;14886|24257-&gt;14887|24308-&gt;14909|24527-&gt;15099|24557-&gt;15100|24612-&gt;15126|24765-&gt;15250|24795-&gt;15251|24854-&gt;15281|25004-&gt;15402|25034-&gt;15403|25091-&gt;15431|25173-&gt;15484|25203-&gt;15485|25262-&gt;15515|25431-&gt;15655|25461-&gt;15656|25518-&gt;15684|25929-&gt;16066|25959-&gt;16067|26008-&gt;16087|26038-&gt;16088
+                  LINES: 23-&gt;1|24-&gt;2|29-&gt;3|34-&gt;3|36-&gt;5|42-&gt;11|42-&gt;11|42-&gt;11|44-&gt;13|44-&gt;13|45-&gt;14|50-&gt;19|50-&gt;19|51-&gt;20|51-&gt;20|51-&gt;20|52-&gt;21|57-&gt;26|57-&gt;26|58-&gt;27|58-&gt;27|58-&gt;27|59-&gt;28|61-&gt;30|61-&gt;30|62-&gt;31|62-&gt;31|62-&gt;31|63-&gt;32|67-&gt;36|67-&gt;36|68-&gt;37|68-&gt;37|68-&gt;37|69-&gt;38|74-&gt;43|74-&gt;43|75-&gt;44|75-&gt;44|75-&gt;44|76-&gt;45|83-&gt;52|83-&gt;52|84-&gt;53|84-&gt;53|84-&gt;53|85-&gt;54|87-&gt;56|87-&gt;56|88-&gt;57|88-&gt;57|88-&gt;57|89-&gt;58|96-&gt;65|96-&gt;65|97-&gt;66|97-&gt;66|97-&gt;66|98-&gt;67|99-&gt;68|99-&gt;68|100-&gt;69|100-&gt;69|100-&gt;69|101-&gt;70|104-&gt;73|104-&gt;73|105-&gt;74|105-&gt;74|105-&gt;74|106-&gt;75|108-&gt;77|108-&gt;77|109-&gt;78|109-&gt;78|109-&gt;78|110-&gt;79|116-&gt;85|116-&gt;85|117-&gt;86|117-&gt;86|117-&gt;86|118-&gt;87|120-&gt;89|120-&gt;89|121-&gt;90|121-&gt;90|121-&gt;90|122-&gt;91|128-&gt;97|128-&gt;97|129-&gt;98|129-&gt;98|129-&gt;98|130-&gt;99|133-&gt;102|133-&gt;102|134-&gt;103|134-&gt;103|134-&gt;103|135-&gt;104|137-&gt;106|137-&gt;106|138-&gt;107|138-&gt;107|138-&gt;107|139-&gt;108|141-&gt;110|141-&gt;110|142-&gt;111|142-&gt;111|142-&gt;111|143-&gt;112|144-&gt;113|144-&gt;113|145-&gt;114|145-&gt;114|145-&gt;114|146-&gt;115|148-&gt;117|148-&gt;117|149-&gt;118|149-&gt;118|149-&gt;118|150-&gt;119|151-&gt;120|151-&gt;120|152-&gt;121|177-&gt;146|178-&gt;147|178-&gt;147|178-&gt;147|179-&gt;148|179-&gt;148|180-&gt;149|181-&gt;150|181-&gt;150|181-&gt;150|182-&gt;151|182-&gt;151|182-&gt;151|183-&gt;152|183-&gt;152|183-&gt;152|184-&gt;153|184-&gt;153|184-&gt;153|185-&gt;154|185-&gt;154|185-&gt;154|186-&gt;155|187-&gt;156|187-&gt;156|187-&gt;156|188-&gt;157|188-&gt;157|188-&gt;157|190-&gt;159|191-&gt;160|192-&gt;161|193-&gt;162|194-&gt;163|197-&gt;166|197-&gt;166|198-&gt;167|206-&gt;175|206-&gt;175|206-&gt;175|208-&gt;177|208-&gt;177|209-&gt;178|212-&gt;181|212-&gt;181|213-&gt;182|215-&gt;184|215-&gt;184|217-&gt;186|217-&gt;186|218-&gt;187|218-&gt;187|218-&gt;187|219-&gt;188|221-&gt;190|221-&gt;190|221-&gt;190|221-&gt;190|221-&gt;190|222-&gt;191|224-&gt;193|224-&gt;193|224-&gt;193|224-&gt;193|224-&gt;193|225-&gt;194|226-&gt;195|226-&gt;195|227-&gt;196|227-&gt;196|229-&gt;198|229-&gt;198|230-&gt;199|234-&gt;203|234-&gt;203|236-&gt;205|236-&gt;205|237-&gt;206|240-&gt;209|240-&gt;209|241-&gt;210|241-&gt;210|243-&gt;212|246-&gt;215|246-&gt;215|247-&gt;216|248-&gt;217|248-&gt;217|249-&gt;218|251-&gt;220|251-&gt;220|253-&gt;222|255-&gt;224|255-&gt;224|256-&gt;225|257-&gt;226|257-&gt;226|257-&gt;226|257-&gt;226|257-&gt;226|257-&gt;226|258-&gt;227|260-&gt;229|260-&gt;229|261-&gt;230|261-&gt;230|269-&gt;238|269-&gt;238|269-&gt;238|269-&gt;238|273-&gt;242|273-&gt;242|273-&gt;242|273-&gt;242|277-&gt;246|277-&gt;246|278-&gt;247|279-&gt;248|279-&gt;248|279-&gt;248|279-&gt;248|281-&gt;250|281-&gt;250|283-&gt;252|283-&gt;252|283-&gt;252|284-&gt;253|285-&gt;254|285-&gt;254|285-&gt;254|285-&gt;254|287-&gt;256|287-&gt;256|290-&gt;259|294-&gt;263|294-&gt;263|295-&gt;264|316-&gt;285|316-&gt;285|316-&gt;285|316-&gt;285|318-&gt;287|318-&gt;287|318-&gt;287|318-&gt;287|322-&gt;291|322-&gt;291|322-&gt;291|322-&gt;291|326-&gt;295|326-&gt;295|326-&gt;295|326-&gt;295|339-&gt;308|339-&gt;308|344-&gt;313|344-&gt;313|345-&gt;314|346-&gt;315|346-&gt;315|346-&gt;315|346-&gt;315|346-&gt;315|347-&gt;316|348-&gt;317|348-&gt;317|350-&gt;319|354-&gt;323|354-&gt;323|355-&gt;324|357-&gt;326|357-&gt;326|358-&gt;327|358-&gt;327|359-&gt;328|363-&gt;332|363-&gt;332|364-&gt;333|367-&gt;336|367-&gt;336|368-&gt;337|370-&gt;339|370-&gt;339|372-&gt;341|372-&gt;341|372-&gt;341|373-&gt;342|375-&gt;344|375-&gt;344|377-&gt;346|385-&gt;354|385-&gt;354|386-&gt;355|386-&gt;355
+                  -- GENERATED --
+              */
+          
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadabilityActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">ReadabilityActor.java</span></div><h1>ReadabilityActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.Props;
+import akka.actor.Status;
+import models.api.YouTubeService;
+import models.data.Constants;
+
+import java.io.IOException;
+
+/**
+ * The {@code ReadabilityActor} is responsible for calculating readability scores and grades for YouTube video descriptions.
+ *
+ * &lt;p&gt;This actor communicates with the {@code YouTubeService} to fetch and analyze video descriptions for readability metrics
+ * based on a provided search term. It handles incoming requests for readability analysis and responds with the results or errors.
+ */
+public class ReadabilityActor extends AbstractActor {
+    private final YouTubeService youTubeService;
+
+    /**
+     * Constructs a {@code ReadabilityActor}.
+     *
+     * @param youTubeService The service used to perform readability analysis on YouTube data.
+     */
+<span class="fc" id="L25">    public ReadabilityActor(YouTubeService youTubeService) {</span>
+<span class="fc" id="L26">        this.youTubeService = youTubeService;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Factory method to create {@code Props} for this actor.
+     *
+     * @param youTubeService The service used to perform readability analysis.
+     * @return A {@code Props} instance for creating this actor.
+     */
+    public static Props props(YouTubeService youTubeService) {
+<span class="fc" id="L36">        return Props.create(ReadabilityActor.class, () -&gt; new ReadabilityActor(youTubeService));</span>
+    }
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code AnalyzeReadabilityRequest}: Triggers readability analysis for the provided search term.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L51">        return receiveBuilder()</span>
+<span class="fc" id="L52">                .match(AnalyzeReadabilityRequest.class, this::handleReadabilityAnalysis)</span>
+<span class="fc" id="L53">                .build();</span>
+    }
+
+    /**
+     * Handles readability analysis requests.
+     *
+     * &lt;p&gt;Uses the {@code YouTubeService} to calculate readability scores and grades for video descriptions related
+     * to the search term. Sends the result back to the sender or reports a failure if an exception occurs.
+     *
+     * @param request The request containing the search term for readability analysis.
+     */
+    private void handleReadabilityAnalysis(AnalyzeReadabilityRequest request) {
+        try {
+<span class="fc" id="L66">            double averageGrade = youTubeService.getavgFleshGrade(request.searchTerm, Constants.MAX_DESC_SENTIMENT_COUNT);</span>
+<span class="fc" id="L67">            double averageScore = youTubeService.getavgFleshScore(request.searchTerm, Constants.MAX_DESC_SENTIMENT_COUNT);</span>
+
+<span class="fc" id="L69">            getSender().tell(new AnalyzeReadabilityResponse(averageGrade, averageScore), getSelf());</span>
+<span class="fc" id="L70">        } catch (IOException e) {</span>
+<span class="fc" id="L71">            getSender().tell(new Status.Failure(e), getSelf());</span>
+<span class="fc" id="L72">        }</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Represents a request to perform readability analysis.
+     */
+    public static class AnalyzeReadabilityRequest {
+        /**
+         * The search term for which readability analysis is to be performed.
+         */
+        public final String searchTerm;
+
+        /**
+         * Constructs an {@code AnalyzeReadabilityRequest}.
+         *
+         * @param searchTerm The search term for readability analysis.
+         */
+<span class="fc" id="L89">        public AnalyzeReadabilityRequest(String searchTerm) {</span>
+<span class="fc" id="L90">            this.searchTerm = searchTerm;</span>
+<span class="fc" id="L91">        }</span>
+    }
+
+    /**
+     * Represents the response containing the readability analysis results.
+     */
+    public static class AnalyzeReadabilityResponse {
+        /**
+         * The average Flesch-Kincaid Grade Level.
+         */
+        public final double averageGrade;
+
+        /**
+         * The average Flesch Reading Ease score.
+         */
+        public final double averageScore;
+
+        /**
+         * Constructs an {@code AnalyzeReadabilityResponse}.
+         *
+         * @param averageGrade The average Flesch-Kincaid Grade Level.
+         * @param averageScore The average Flesch Reading Ease score.
+         */
+<span class="fc" id="L114">        public AnalyzeReadabilityResponse(double averageGrade, double averageScore) {</span>
+<span class="fc" id="L115">            this.averageGrade = averageGrade;</span>
+<span class="fc" id="L116">            this.averageScore = averageScore;</span>
+<span class="fc" id="L117">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

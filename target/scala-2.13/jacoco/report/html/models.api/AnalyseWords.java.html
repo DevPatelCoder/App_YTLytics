@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnalyseWords.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.api</a> &gt; <span class="el_source">AnalyseWords.java</span></div><h1>AnalyseWords.java</h1><pre class="source lang-java linenums">package models.api;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static models.api.AnalyseSentiment.IGNORE_STOP_WORDS;
+
+/**
+ * The {@code AnalyseWords} class provides functionality for analyzing word statistics
+ * from video descriptions. It filters out stop words, numbers, and symbols, and counts
+ * the frequency of remaining words.
+ *
+ */
+<span class="nc" id="L16">public class AnalyseWords {</span>
+
+    /**
+     * Array of words representing numbers to be ignored during analysis.
+     */
+<span class="fc" id="L21">    public final static String[] NUMBER_WORDS = {&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;0&quot;};</span>
+
+    /**
+     * Array of symbols to be ignored during analysis.
+     */
+<span class="fc" id="L26">    public final static String[] SYMBOLS = {&quot;!&quot;, &quot;@&quot;, &quot;#&quot;, &quot;$&quot;, &quot;%&quot;, &quot;^&quot;, &quot;&amp;&quot;, &quot;*&quot;, &quot;(&quot;, &quot;)&quot;, &quot;-&quot;, &quot;_&quot;, &quot;+&quot;, &quot;=&quot;, &quot;{&quot;, &quot;}&quot;, &quot;[&quot;, &quot;]&quot;, &quot;|&quot;, &quot;\\&quot;, &quot;:&quot;, &quot;;&quot;, &quot;\&quot;&quot;, &quot;'&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;,&quot;, &quot;.&quot;, &quot;?&quot;, &quot;/&quot;, &quot;`&quot;, &quot;~&quot;};</span>
+
+    /**
+     * Analyzes the word frequency in a list of video descriptions.
+     * &lt;p&gt;
+     * This method processes the list of descriptions in parallel, filters out stop words,
+     * numbers, and symbols, and then counts the frequency of each word in the descriptions.
+     * &lt;/p&gt;
+     *
+     * @param videoDescriptions the list of video descriptions to analyze
+     * @return a map where the keys are words and the values are their respective frequencies
+     */
+    public static Map&lt;String, Integer&gt; analyzeWordStats(List&lt;String&gt; videoDescriptions) {
+<span class="fc" id="L39">        return videoDescriptions.parallelStream()</span>
+<span class="fc" id="L40">                .map(AnalyseWords::processWordStats)</span>
+<span class="fc" id="L41">                .flatMap(map -&gt; map.entrySet().stream())</span>
+<span class="fc" id="L42">                .collect(Collectors.toMap(</span>
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        Integer::sum,
+                        HashMap::new
+                ));
+    }
+
+    /**
+     * Processes the word statistics for a single video description by filtering out
+     * stop words, numbers, and symbols, and counting the remaining words.
+     *
+     * @param description the video description to process
+     * @return a map where the keys are words and the values are their frequencies (1 for each occurrence)
+     */
+    private static Map&lt;String, Integer&gt; processWordStats(String description) {
+        // Remove stop words
+<span class="fc" id="L59">        String[] words = description.toUpperCase().split(&quot;\\s+&quot;);</span>
+<span class="fc" id="L60">        String[] filteredWords = java.util.Arrays.stream(words)</span>
+<span class="pc bpc" id="L61" title="2 of 6 branches missed.">                .filter(word -&gt; !contains(IGNORE_STOP_WORDS, word) &amp;&amp; !contains(NUMBER_WORDS, word) &amp;&amp; !contains(SYMBOLS, word))</span>
+<span class="fc" id="L62">                .toArray(String[]::new);</span>
+
+<span class="fc" id="L64">        return java.util.Arrays.stream(filteredWords)</span>
+<span class="fc" id="L65">                .collect(Collectors.toMap(</span>
+<span class="fc" id="L66">                        word -&gt; word,</span>
+<span class="fc" id="L67">                        word -&gt; 1,</span>
+                        Integer::sum,
+                        HashMap::new
+                ));
+    }
+
+    /**
+     * Checks if a given value exists in an array.
+     *
+     * @param array the array to check
+     * @param value the value to search for
+     * @return {@code true} if the value is found in the array, {@code false} otherwise
+     */
+    private static boolean contains(String[] array, String value) {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (String item : array) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (item.equals(value)) {</span>
+<span class="fc" id="L83">                return true;</span>
+            }
+        }
+<span class="fc" id="L86">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

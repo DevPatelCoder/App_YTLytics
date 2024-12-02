@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TagActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">TagActor.java</span></div><h1>TagActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.*;
+import models.api.YouTubeService;
+import models.data.VideoData;
+import play.mvc.Result;
+import play.mvc.Results;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * The {@code TagActor} class is responsible for searching videos on YouTube based on a provided tag.
+ *
+ * &lt;p&gt;This actor communicates with the {@code YouTubeService} to perform video searches asynchronously.
+ * It processes incoming search requests, interacts with the YouTube API to fetch video data, and sends the results
+ * back to the requester. The actor is also designed to be integrated with a Play Framework controller for handling
+ * HTTP requests.
+ */
+<span class="nc" id="L24">public abstract class TagActor extends AbstractActor {</span>
+    /**
+     * Creates a {@code YouTubeService} instance.
+     *
+     * &lt;p&gt;This method is meant to be overridden by subclasses to provide a custom implementation for creating
+     * the {@code YouTubeService}.
+     *
+     * @return A {@code YouTubeService} instance.
+     * @throws GeneralSecurityException If a security issue occurs during service creation.
+     * @throws IOException              If an I/O error occurs during service creation.
+     */
+    protected abstract YouTubeService createYouTubeService()
+            throws GeneralSecurityException, IOException;
+
+    // Nested message classes for actor communication
+    public static class SearchVideosRequest {
+        private final String tag;
+
+<span class="nc" id="L42">        public SearchVideosRequest(String tag) {</span>
+<span class="nc" id="L43">            this.tag = tag;</span>
+<span class="nc" id="L44">        }</span>
+
+        public String getTag() {
+<span class="nc" id="L47">            return tag;</span>
+        }
+    }
+    /**
+     * Factory method for creating {@code Props} for this actor.
+     *
+     * @return A {@code Props} instance for creating a {@code TagActor}.
+     */
+    // Static factory method for creating Props
+    public static Props props() {
+<span class="nc" id="L57">        return Props.create(TagActor.class);</span>
+    }
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code SearchVideosRequest}: Initiates a video search for the provided tag.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="nc" id="L72">        return receiveBuilder()</span>
+<span class="nc" id="L73">                .match(SearchVideosRequest.class, this::handleSearchRequest)</span>
+<span class="nc" id="L74">                .build();</span>
+    }
+
+    /**
+     * Handles video search requests.
+     *
+     * &lt;p&gt;Initializes the YouTube service and performs a search for videos matching the provided tag.
+     * The search is executed asynchronously, and the results are sent back to the requester.
+     *
+     * @param request The {@code SearchVideosRequest} containing the search tag.
+     */
+    private void handleSearchRequest(SearchVideosRequest request) {
+        // Sender is the original requester
+<span class="nc" id="L87">        final ActorRef sender = getSender();</span>
+
+        // Create a YouTube service
+        final YouTubeService youtubeService;
+        try {
+<span class="nc" id="L92">            youtubeService = new YouTubeService(&quot;AIzaSyCij5EdAmn7uMkPq-1Alg6IvvDocQkHpDM&quot;);</span>
+<span class="nc" id="L93">        } catch (GeneralSecurityException | IOException e) {</span>
+<span class="nc" id="L94">            sender.tell(</span>
+<span class="nc" id="L95">                    Results.internalServerError(&quot;Error initializing YouTube service: &quot; + e.getMessage()),</span>
+<span class="nc" id="L96">                    getSelf()</span>
+            );
+<span class="nc" id="L98">            return;</span>
+<span class="nc" id="L99">        }</span>
+
+        // Perform search asynchronously
+<span class="nc" id="L102">        CompletableFuture.supplyAsync(() -&gt; {</span>
+            try {
+<span class="nc" id="L104">                List&lt;VideoData&gt; videos = youtubeService.searchVideos(request.getTag(), 10);</span>
+<span class="nc" id="L105">                return views.html.videoList.render(request.getTag(), videos);</span>
+<span class="nc" id="L106">            } catch (IOException e) {</span>
+<span class="nc" id="L107">                return Results.internalServerError(&quot;Error fetching videos: &quot; + e.getMessage());</span>
+            }
+<span class="nc" id="L109">        }).thenAccept(result -&gt; {</span>
+            // Send result back to sender
+<span class="nc" id="L111">            sender.tell(result, getSelf());</span>
+<span class="nc" id="L112">        });</span>
+<span class="nc" id="L113">    }</span>
+
+    /**
+     * Handles a video search request in the context of a Play Framework controller.
+     *
+     * &lt;p&gt;This method uses the {@code TagActor} to perform a video search and returns the result asynchronously
+     * as a {@code CompletionStage}.
+     *
+     * @param system The {@code ActorSystem} used to create the actor.
+     * @param tag    The search tag for fetching videos.
+     * @return A {@code CompletionStage&lt;Result&gt;} representing the search result.
+     * @throws ExecutionException   If an error occurs while fetching the result.
+     * @throws InterruptedException If the operation is interrupted.
+     */
+    // Helper method to create and use the actor in a Play Controller
+    public static CompletionStage&lt;Result&gt; searchVideos(ActorSystem system, String tag) throws ExecutionException, InterruptedException {
+        // Create a promise/future to return the result
+<span class="nc" id="L130">        CompletableFuture&lt;Result&gt; resultFuture = new CompletableFuture&lt;&gt;();</span>
+
+        // Create the actor
+<span class="nc" id="L133">        ActorRef searchActor = system.actorOf(TagActor.props());</span>
+
+        // Set up a temporary receiver to handle the response
+<span class="nc" id="L136">        ActorRef receiver = system.actorOf(Props.create(AbstractActor.class, () -&gt;</span>
+<span class="nc" id="L137">                new AbstractActor() {</span>
+                    @Override
+                    public Receive createReceive() {
+<span class="nc" id="L140">                        return receiveBuilder()</span>
+<span class="nc" id="L141">                                .match(Result.class, result -&gt; {</span>
+<span class="nc" id="L142">                                    resultFuture.complete(result);</span>
+<span class="nc" id="L143">                                    getContext().stop(getSelf());</span>
+<span class="nc" id="L144">                                })</span>
+<span class="nc" id="L145">                                .match(Status.Failure.class, failure -&gt; {</span>
+<span class="nc" id="L146">                                    resultFuture.completeExceptionally(failure.cause());</span>
+<span class="nc" id="L147">                                    getContext().stop(getSelf());</span>
+<span class="nc" id="L148">                                })</span>
+<span class="nc" id="L149">                                .build();</span>
+                    }
+                }
+        ));
+
+        // Send the search request
+<span class="nc" id="L155">        searchActor.tell(new SearchVideosRequest(tag), receiver);</span>
+
+<span class="nc" id="L157">        return CompletableFuture.completedFuture(resultFuture.get());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

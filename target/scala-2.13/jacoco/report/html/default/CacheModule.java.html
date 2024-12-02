@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CacheModule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">CacheModule.java</span></div><h1>CacheModule.java</h1><pre class="source lang-java linenums">import com.google.inject.AbstractModule;
+import models.api.CacheManager;
+
+
+/**
+ * A module that configures the cache manager for dependency injection using Google Guice.
+ * &lt;p&gt;
+ * This module binds the {@link CacheManager} class to the Guice injector and ensures that it is 
+ * initialized as an eager singleton. It uses the Play Framework's environment and configuration
+ * to provide necessary dependencies for the {@link CacheManager}.
+ * &lt;/p&gt;
+ *
+ */
+public class CacheModule extends AbstractModule {
+    private final play.api.Environment environment;
+    private final play.api.Configuration configuration;
+
+    /**
+     * Constructor to initialize the CacheModule with the environment and configuration.
+     *
+     * @param environment the Play Framework environment object
+     * @param configuration the Play Framework configuration object
+     */
+<span class="nc" id="L24">    public CacheModule(play.api.Environment environment, play.api.Configuration configuration) {</span>
+<span class="nc" id="L25">        this.environment = environment;</span>
+<span class="nc" id="L26">        this.configuration = configuration;</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * Configures the binding for the CacheManager class.
+     * &lt;p&gt;
+     * This method binds the {@link CacheManager} class to the Guice injector as an eager singleton.
+     * The singleton will be created immediately upon application startup.
+     * &lt;/p&gt;
+     */
+    @Override
+    protected void configure() {
+<span class="nc" id="L38">        bind(CacheManager.class).asEagerSingleton();</span>
+<span class="nc" id="L39">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

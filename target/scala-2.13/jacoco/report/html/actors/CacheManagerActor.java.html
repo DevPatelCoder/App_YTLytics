@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CacheManagerActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">CacheManagerActor.java</span></div><h1>CacheManagerActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.actor.Status;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import models.api.YouTubeService;
+import models.data.ChannelVideoData;
+import models.data.Constants;
+import models.data.VideoSearchData;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * The CacheManagerActor class serves as a central actor for managing cached data
+ * related to YouTube search results, channel metadata, and video tags. It handles
+ * requests for cached data, initiates new data retrieval when necessary, and
+ * periodically refreshes the cached data to ensure consistency.
+ *
+ * &lt;p&gt;This actor utilizes a YouTubeService instance to interact with the YouTube Data API
+ * and uses Akka's actor model for concurrency and messaging. Cache management is
+ * implemented using thread-safe collections.
+ */
+public class CacheManagerActor extends AbstractActor {
+<span class="pc" id="L30">    private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);</span>
+
+    // Cache stores
+<span class="pc" id="L33">    private final ConcurrentHashMap&lt;String, VideoSearchData&gt; searchResults = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="pc" id="L34">    private final ConcurrentHashMap&lt;String, ChannelVideoData&gt; channelMetaDataCache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="pc" id="L35">    private final ConcurrentHashMap&lt;String, List&lt;String&gt;&gt; videoTagsCache = new ConcurrentHashMap&lt;&gt;();</span>
+
+    private final YouTubeService youTubeService;
+    private ActorRef timerActor;
+
+
+    /**
+     * Constructor initializing the CacheManagerActor with a YouTubeService instance.
+     *
+     * @param youTubeService The YouTubeService instance for API interactions.
+     */
+<span class="fc" id="L46">    public CacheManagerActor(YouTubeService youTubeService) {</span>
+<span class="fc" id="L47">        this.youTubeService = youTubeService;</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Constructor initializing the CacheManagerActor with a configuration object.
+     *
+     * @param config The configuration object containing API keys and other settings.
+     * @throws GeneralSecurityException If a security issue occurs while creating the YouTubeService.
+     * @throws IOException              If an I/O error occurs during initialization.
+     */
+<span class="nc" id="L57">    public CacheManagerActor(com.typesafe.config.Config config) throws GeneralSecurityException, IOException {</span>
+<span class="nc" id="L58">        String apiKey = config.getString(&quot;youtube.api.key&quot;);</span>
+<span class="nc" id="L59">        this.youTubeService = createYouTubeService(apiKey);</span>
+<span class="nc" id="L60">    }</span>
+
+    //Actor Messages
+    // Message for timer tick
+<span class="fc" id="L64">    public static class RefreshCache {}</span>
+    // Actor messages
+    public static class SearchRequest {
+        public final String searchTerm;
+<span class="fc" id="L68">        public SearchRequest(String searchTerm) {</span>
+<span class="fc" id="L69">            this.searchTerm = searchTerm;</span>
+<span class="fc" id="L70">        }</span>
+    }
+
+    public static class ChannelRequest {
+        public final String channelId;
+<span class="nc" id="L75">        public ChannelRequest(String channelId) {</span>
+<span class="nc" id="L76">            this.channelId = channelId;</span>
+<span class="nc" id="L77">        }</span>
+    }
+
+    public static class VideoTagRequest {
+        public final String videoId;
+<span class="nc" id="L82">        public VideoTagRequest(String videoId) {</span>
+<span class="nc" id="L83">            this.videoId = videoId;</span>
+<span class="nc" id="L84">        }</span>
+    }
+
+    /**
+     * Factory method to create Props for the CacheManagerActor.
+     *
+     * @param config The configuration object containing API keys and other settings.
+     * @return Props instance for creating CacheManagerActor instances.
+     * @throws GeneralSecurityException If a security issue occurs while creating the YouTubeService.
+     * @throws IOException              If an I/O error occurs during initialization.
+     */
+    public static Props props(com.typesafe.config.Config config) throws GeneralSecurityException, IOException {
+<span class="fc" id="L96">        String apiKey = config.getString(&quot;youtube.api.key&quot;);</span>
+<span class="fc" id="L97">        YouTubeService youTubeService = createYouTubeService(apiKey);</span>
+<span class="fc" id="L98">        return Props.create(CacheManagerActor.class, () -&gt; new CacheManagerActor(youTubeService));</span>
+    }
+
+    private static YouTubeService createYouTubeService(String apiKey) throws GeneralSecurityException, IOException {
+<span class="fc" id="L102">        return new YouTubeService(apiKey);</span>
+    }
+
+    // Actor lifecycle methods
+    @Override
+    public void preStart() {
+
+<span class="fc" id="L109">        timerActor = getContext().actorOf(</span>
+<span class="fc" id="L110">                CacheRefreshTimerActor.props(),</span>
+                &quot;cache-refresh-timer&quot;
+        );
+
+
+<span class="fc" id="L115">        timerActor.tell(</span>
+                new CacheRefreshTimerActor.StartTimer(&quot;searchCache&quot;, Constants.REFRESH_RATE_IN_SECONDS),
+<span class="fc" id="L117">                getSelf()</span>
+        );
+<span class="fc" id="L119">    }</span>
+
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L123">        return receiveBuilder()</span>
+<span class="fc" id="L124">                .match(SearchRequest.class, this::handleSearchRequest)</span>
+<span class="fc" id="L125">                .match(ChannelRequest.class, this::handleChannelRequest)</span>
+<span class="fc" id="L126">                .match(VideoTagRequest.class, this::handleVideoTagRequest)</span>
+<span class="fc" id="L127">                .match(VideoSearchData.class, result -&gt; {</span>
+                    // Cache the search result when received from coordinator
+<span class="fc" id="L129">                    searchResults.put(result.getQuery(), result);</span>
+                    // Forward the result to the original sender if it's not ourselves
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                    if (!getSender().equals(getSelf())) {</span>
+<span class="fc" id="L132">                        getSender().tell(result, getSelf());</span>
+                    }
+<span class="fc" id="L134">                })</span>
+<span class="fc" id="L135">                .match(ChannelProfileActor.SearchChannelVideosResponse.class, result -&gt; {</span>
+<span class="nc" id="L136">                    channelMetaDataCache.put(result.channelVideoData.getVideoDataList().get(0).getChannelId(), result.channelVideoData);</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                    if (!getSender().equals(getSelf())) {</span>
+<span class="nc" id="L138">                        getSender().tell(result.channelVideoData, getSelf());</span>
+                    }
+<span class="nc" id="L140">                })</span>
+<span class="fc" id="L141">                .match(RefreshCache.class, msg -&gt; handleRefreshCache())</span>
+<span class="fc" id="L142">                .build();</span>
+    }
+
+    @Override
+    public void postStop() {
+        // Stop the timer when the CacheManager is stopped
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (timerActor != null) {</span>
+<span class="fc" id="L149">            timerActor.tell(</span>
+                    new CacheRefreshTimerActor.StopTimer(&quot;searchCache&quot;),
+<span class="fc" id="L151">                    getSelf()</span>
+            );
+        }
+<span class="fc" id="L154">    }</span>
+
+    private void handleSearchRequest(SearchRequest request) {
+<span class="fc" id="L157">        VideoSearchData cachedResult = searchResults.get(request.searchTerm);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (cachedResult != null) {</span>
+<span class="fc" id="L159">            getSender().tell(cachedResult, getSelf());</span>
+<span class="fc" id="L160">            return;</span>
+        }
+
+
+<span class="fc" id="L164">        ActorRef coordinator = getContext().actorOf(</span>
+<span class="fc" id="L165">                SearchCoordinatorActor.props(</span>
+                        request.searchTerm,
+                        youTubeService,
+<span class="fc" id="L168">                        getSelf()</span>
+                ),
+<span class="fc" id="L170">                &quot;search-coordinator-&quot; + request.searchTerm.hashCode()</span>
+        );
+
+
+<span class="fc" id="L174">        coordinator.tell(getSender(), getSelf());</span>
+<span class="fc" id="L175">    }</span>
+
+    private void handleChannelRequest(ChannelRequest request) {
+<span class="nc" id="L178">        ChannelVideoData cachedResult = channelMetaDataCache.get(request.channelId);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (cachedResult != null) {</span>
+<span class="nc" id="L180">            getSender().tell(cachedResult, getSelf());</span>
+<span class="nc" id="L181">            return;</span>
+        }
+
+<span class="nc" id="L184">        ActorRef channelProfileActor = getContext().actorOf(</span>
+<span class="nc" id="L185">                ChannelProfileActor.props(youTubeService, getSelf()),</span>
+<span class="nc" id="L186">                &quot;channel-profile-search-&quot; + request.channelId.hashCode());</span>
+
+        // Forward the original sender to handle the response
+<span class="nc" id="L189">        channelProfileActor.tell(new ChannelProfileActor.SearchChannelVideosRequest(request.channelId), getSelf());</span>
+
+<span class="nc" id="L191">    }</span>
+
+    private void handleVideoTagRequest(VideoTagRequest request) {
+        try {
+<span class="nc" id="L195">            List&lt;String&gt; cachedTags = videoTagsCache.get(request.videoId);</span>
+
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            if (cachedTags == null) {</span>
+<span class="nc" id="L198">                cachedTags = youTubeService.getVideoTags(request.videoId);</span>
+<span class="nc" id="L199">                videoTagsCache.put(request.videoId, cachedTags);</span>
+            }
+
+<span class="nc" id="L202">            getSender().tell(cachedTags, getSelf());</span>
+<span class="nc" id="L203">        } catch (IOException e) {</span>
+<span class="nc" id="L204">            getSender().tell(new Status.Failure(e), getSelf());</span>
+<span class="nc" id="L205">        }</span>
+<span class="nc" id="L206">    }</span>
+
+    private void handleRefreshCache() {
+<span class="fc" id="L209">        log.info(&quot;Starting cache refresh&quot;);</span>
+        // Iterate through all cached search terms and refresh them
+<span class="fc" id="L211">        searchResults.keySet().forEach(searchTerm -&gt; {</span>
+            // Create a coordinator actor for each search term
+<span class="fc" id="L213">            ActorRef coordinator = getContext().actorOf(</span>
+<span class="fc" id="L214">                    SearchCoordinatorActor.props(</span>
+                            searchTerm,
+                            youTubeService,
+<span class="fc" id="L217">                            getSelf()</span>
+                    ),
+<span class="fc" id="L219">                    &quot;refresh-coordinator-&quot; + searchTerm.hashCode() + &quot;-&quot; + System.currentTimeMillis()</span>
+            );
+
+            // Send ourselves as the sender to receive the updated results
+<span class="fc" id="L223">            coordinator.tell(getSelf(), getSelf());</span>
+<span class="fc" id="L224">        });</span>
+<span class="fc" id="L225">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

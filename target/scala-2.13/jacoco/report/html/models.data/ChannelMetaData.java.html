@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChannelMetaData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.data</a> &gt; <span class="el_source">ChannelMetaData.java</span></div><h1>ChannelMetaData.java</h1><pre class="source lang-java linenums">package models.data;
+
+import java.math.BigInteger;
+import java.util.List;
+
+/**
+ * Represents the metadata of a YouTube channel, including information
+ * such as the channel title, description, view count, subscriber count,
+ * video count, and the list of video IDs associated with the channel
+ */
+<span class="fc" id="L11">public class ChannelMetaData {</span>
+
+    /** The title of the channel. */
+    private String title;
+
+    /** The description of the channel. */
+    private String description;
+
+    /** The total number of views the channel has. */
+    private BigInteger viewCount;
+
+    /** The total number of subscribers of the channel. */
+    private BigInteger subscriberCount;
+
+    /** The total number of videos in the channel. */
+    private BigInteger videoCount;
+
+    /** A list of video IDs associated with the channel. */
+    private List&lt;String&gt; videoIds;
+
+    /**
+     * Gets the title of the channel.
+     *
+     * @return the title of the channel
+     */
+    public String getTitle() {
+<span class="fc" id="L37">        return title;</span>
+    }
+
+    /**
+     * Sets the title of the channel.
+     *
+     * @param title the new title of the channel
+     */
+    public void setTitle(String title) {
+<span class="fc" id="L46">        this.title = title;</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Gets the description of the channel.
+     *
+     * @return the description of the channel
+     */
+    public String getDescription() {
+<span class="fc" id="L55">        return description;</span>
+    }
+
+    /**
+     * Sets the description of the channel.
+     *
+     * @param description the new description of the channel
+     */
+    public void setDescription(String description) {
+<span class="fc" id="L64">        this.description = description;</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Gets the total view count of the channel.
+     *
+     * @return the view count of the channel
+     */
+    public BigInteger getViewCount() {
+<span class="fc" id="L73">        return viewCount;</span>
+    }
+
+    /**
+     * Sets the total view count of the channel.
+     *
+     * @param viewCount the new view count of the channel
+     */
+    public void setViewCount(BigInteger viewCount) {
+<span class="fc" id="L82">        this.viewCount = viewCount;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Gets the total subscriber count of the channel.
+     *
+     * @return the subscriber count of the channel
+     */
+    public BigInteger getSubscriberCount() {
+<span class="fc" id="L91">        return subscriberCount;</span>
+    }
+
+    /**
+     * Sets the total subscriber count of the channel.
+     *
+     * @param subscriberCount the new subscriber count of the channel
+     */
+    public void setSubscriberCount(BigInteger subscriberCount) {
+<span class="fc" id="L100">        this.subscriberCount = subscriberCount;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Gets the total video count of the channel.
+     *
+     * @return the video count of the channel
+     */
+    public BigInteger getVideoCount() {
+<span class="fc" id="L109">        return videoCount;</span>
+    }
+
+    /**
+     * Sets the total video count of the channel.
+     *
+     * @param videoCount the new video count of the channel
+     */
+    public void setVideoCount(BigInteger videoCount) {
+<span class="fc" id="L118">        this.videoCount = videoCount;</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * Gets the list of video IDs associated with the channel.
+     *
+     * @return the list of video IDs
+     */
+    public List&lt;String&gt; getVideoIds() {
+<span class="nc" id="L127">        return videoIds;</span>
+    }
+
+    /**
+     * Sets the list of video IDs associated with the channel.
+     *
+     * @param videoIds the new list of video IDs
+     */
+    public void setVideoIds(List&lt;String&gt; videoIds) {
+<span class="fc" id="L136">        this.videoIds = videoIds;</span>
+<span class="fc" id="L137">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

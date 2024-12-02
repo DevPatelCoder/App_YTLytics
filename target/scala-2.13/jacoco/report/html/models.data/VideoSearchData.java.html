@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VideoSearchData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.data</a> &gt; <span class="el_source">VideoSearchData.java</span></div><h1>VideoSearchData.java</h1><pre class="source lang-java linenums">package models.data;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Represents the data for a video search query, including the search query itself,
+ * a list of videos that match the search, sentiment analysis, and word count statistics
+ * for the query.
+ *
+ * @author Anubhav Mahajan
+ * @author Arpnik Singh
+ * @version 1.0
+ */
+public class VideoSearchData {
+
+    public double getAvgFleshGrad() {
+<span class="fc" id="L18">        return avgFleshGrad;</span>
+    }
+
+    private final double avgFleshGrad;
+
+    /**
+     * Gets the average Flesch reading ease score of the video descriptions.
+     *
+     * @return The average Flesch reading ease score.
+     */
+    public double getAvgFleshScore() {
+<span class="nc" id="L29">        return avgFleshScore;</span>
+    }
+
+    private final double avgFleshScore;
+
+//    public double getFleshGrad() {
+//        return FleshGrad;
+//    }
+//
+//    private final double FleshGrad;
+//
+//    public double getFleshScor() {
+//        return FleshScor;
+//    }
+//
+//    private final double FleshScor;
+
+    /** The search query string. */
+    private String query;
+
+    /** The list of videos returned by the search. */
+    private List&lt;VideoData&gt; videos;
+
+    /** The word count statistics for the search query. */
+    private Map&lt;String, Integer&gt; wordCount;
+
+    /** The sentiment analysis result for the search query. */
+    private Sentiment sentiment;
+
+    /**
+     * Constructs a new VideoSearchData object with the specified details.
+     *
+     * @param query the search query string
+     * @param videos the list of video data matching the query
+     * @param sentiment the sentiment analysis result for the query
+     * @param wordCount the word count statistics for the query
+     * @author Anubhav Mahajan
+     * @author Arpnik Singh
+     */
+<span class="fc" id="L68">    public VideoSearchData(String query, List&lt;VideoData&gt; videos, Sentiment sentiment,double avgFleshGrad, double avgFleshScore, Map&lt;String, Integer&gt; wordCount) {</span>
+<span class="fc" id="L69">        this.query = query;</span>
+<span class="fc" id="L70">        this.videos = videos;</span>
+<span class="fc" id="L71">        this.sentiment = sentiment;</span>
+<span class="fc" id="L72">        this.avgFleshGrad = avgFleshGrad;</span>
+<span class="fc" id="L73">        this.avgFleshScore = avgFleshScore;</span>
+<span class="fc" id="L74">        this.wordCount = wordCount;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Gets the search query string.
+     *
+     * @return the search query
+     * @author Anubhav Mahajan
+     */
+    public String getQuery() {
+<span class="fc" id="L84">        return query;</span>
+    }
+
+
+    /**
+     * Gets the list of videos returned by the search.
+     *
+     * @return the list of video data
+     * @author Anubhav Mahajan
+     */
+    public List&lt;VideoData&gt; getVideos() {
+<span class="fc" id="L95">        return videos;</span>
+    }
+
+    /**
+     * Gets the word count statistics for the search query.
+     *
+     * @return the word count map
+     * @author Anubhav Mahajan
+     */
+    public Map&lt;String, Integer&gt; getWordCount() {
+<span class="fc" id="L105">        return wordCount;</span>
+    }
+
+    /**
+     * Sets the word count statistics for the search query.
+     *
+     * @param wordCount the new word count map
+     * @author Arpnik Singh
+     */
+    public void setWordCount(Map&lt;String, Integer&gt; wordCount) {
+<span class="nc" id="L115">        this.wordCount = wordCount;</span>
+<span class="nc" id="L116">    }</span>
+
+    /**
+     * Gets the sentiment analysis result for the search query.
+     *
+     * @return the sentiment result
+     * @author Arpnik Singh
+     */
+    public Sentiment getSentiment() {
+<span class="fc" id="L125">        return sentiment;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

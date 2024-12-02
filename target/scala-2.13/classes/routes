@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+
+GET     /                           controllers.HomeController.index(request: Request)
+
+
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /channel/:channelId    controllers.HomeController.channelProfile(channelId: String, request:Request)
+GET     /tags/:videoId      controllers.HomeController.showTags(videoId: String)
+GET     /word-stat/:query    controllers.HomeController.getWordStats(query: String)
+GET     /search/clear   controllers.HomeController.clearHistory(request:Request)
+GET   /videosByTag/:tag   controllers.HomeController.showVideosByTag(tag: String)
+
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+GET     /ws/search                  controllers.HomeController.searchWebSocket()

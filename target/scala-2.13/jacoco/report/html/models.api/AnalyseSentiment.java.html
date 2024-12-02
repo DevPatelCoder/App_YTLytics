@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnalyseSentiment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.api</a> &gt; <span class="el_source">AnalyseSentiment.java</span></div><h1>AnalyseSentiment.java</h1><pre class="source lang-java linenums">package models.api;
+
+import models.data.Constants;
+import models.data.Sentiment;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+/**
+ * The AnalyseSentiment class is responsible for analyzing the sentiment of video descriptions.
+ * It uses predefined sets of happy and sad words and emoticons to determine the sentiment of a given list of descriptions.
+ * For a each description, if the ratio of count of happy word to happy+sad words is greater then 70% then the sentiment is considered as happy.
+ * For a stream of videos, the overall sentiment is defined as happy if 10% of videos description are happy.
+ *  If 10% of videos descriptions are sad, then the overall sentiment is considered as sad. And otherwise considered as neutral.
+ */
+<span class="nc" id="L17">public class AnalyseSentiment {</span>
+
+<span class="fc" id="L19">    private final static String[] HAPPY_WORDS = {  &quot;:)&quot;, &quot;;)&quot;, &quot;:-)&quot;, &quot;:D&quot;, &quot;&lt;3&quot;, &quot;PARTY&quot;, &quot;\uD83D\uDC97&quot;,&quot;\uD83D\uDC93&quot;,&quot;APPRECIATE&quot;,&quot;\uD83D\uDC9A&quot;,&quot;\uD83D\uDC4F&quot;,&quot;\uD83E\uDDE1&quot;,&quot;\uD83D\uDC9B&quot;,&quot;\uD83D\uDC9A&quot;,&quot;\uD83D\uDC9C&quot;,&quot;\uD83E\uDD70&quot;,&quot;\uD83D\uDDA4&quot;,&quot;GAY&quot;, &quot;OVERJOYED&quot;,&quot;THRILLED&quot;,&quot;UPBEAT&quot;, &quot;GREAT&quot;, &quot;HAPPY&quot;, &quot;JOY&quot;, &quot;EXCITED&quot;, &quot;LOVE&quot;, &quot;AWESOME&quot;, &quot;WONDERFUL&quot;, &quot;EXCELLENT&quot;, &quot;AMAZING&quot;, &quot;FANTASTIC&quot;,</span>
+            &quot;BRILLIANT&quot;, &quot;POSITIVE&quot;, &quot;DELIGHT&quot;, &quot;PLEASED&quot;, &quot;CONTENT&quot;, &quot;SATISFIED&quot;, &quot;CHEERFUL&quot;, &quot;GLAD&quot;, &quot;ENTHUSIASTIC&quot;, &quot;GRATEFUL&quot;, &quot;BLESSED&quot;, &quot;HOPEFUL&quot;, &quot;SMILE&quot;, &quot;CELEBRATE&quot;, &quot;ADMIRE&quot;, &quot;VICTORY&quot;, &quot;LAUGH&quot;, &quot;JUBILANT&quot;, &quot;OPTIMISTIC&quot;, &quot;ECSTATIC&quot;, &quot;ELATED&quot;, &quot;CHARMING&quot;, &quot;SUNNY&quot;, &quot;RADIANT&quot;, &quot;PEACEFUL&quot;, &quot;HARMONIOUS&quot;, &quot;LIGHTHEARTED&quot;, &quot;UPLIFTED&quot;, &quot;PROUD&quot;, &quot;GRIN&quot;, &quot;ADORED&quot;, &quot;BRAVO&quot;, &quot;FANTABULOUS&quot;, &quot;GENIUS&quot;, &quot;MASTERPIECE&quot;,
+            &quot;KIND&quot;, &quot;SUPPORTIVE&quot;, &quot;HEARTWARMING&quot;, &quot;HILARIOUS&quot;, &quot;PLAYFUL&quot;, &quot;SPARKLE&quot;, &quot;SERENE&quot;, &quot;GORGEOUS&quot;, &quot;INSPIRE&quot;, &quot;MOTIVATE&quot;, &quot;HOPE&quot;, &quot;POSITIVITY&quot;, &quot;UPLIFT&quot;, &quot;POWER OF SELF-BELIEF&quot;, &quot;DREAM BIG&quot;, &quot;MINDSET&quot;, &quot;GROWTH&quot;, &quot;GRATITUDE&quot;, &quot;OVERCOME CHALLENGES&quot;, &quot;NEVER GIVE UP&quot;, &quot;SUCCESS&quot;, &quot;POSITIVE THINKING&quot;, &quot;INNER PEACE&quot;, &quot;FIND JOY&quot;};
+
+<span class="fc" id="L23">    private final static String[] SAD_WORDS = { &quot;ANGRY&quot;, &quot;:(&quot;, &quot;;(&quot;, &quot;:'(&quot;, &quot;:-(&quot;,&quot;:(&quot;, &quot;MAD&quot;, &quot;DISAPPOINTMENT&quot;, &quot;BAD DAY&quot;,&quot;\uD83D\uDCCA&quot;,&quot;\uD83D\uDE1E&quot;,&quot;\uD83D\uDE14&quot;, &quot;SAD&quot;, &quot;UNHAPPY&quot;, &quot;TERRIBLE&quot;, &quot;BAD&quot;, &quot;AWFUL&quot;, &quot;WORST&quot;, &quot;PAIN&quot;, &quot;SORROW&quot;, &quot;REGRET&quot;, &quot;MISERABLE&quot;, &quot;DEPRESSING&quot;, &quot;DISAPPOINT&quot;, &quot;FAIL&quot;, &quot;GLOOMY&quot;, &quot;HURT&quot;, &quot;CRY&quot;, &quot;GRIEF&quot;, &quot;LONELY&quot;, &quot;HEARTBROKEN&quot;, &quot;FRUSTRATED&quot;, &quot;PATHETIC&quot;, &quot;FEAR&quot;, &quot;HATE&quot;, &quot;RESENT&quot;, &quot;DISTRESS&quot;,</span>
+            &quot;TRAGIC&quot;, &quot;DEVASTATED&quot;, &quot;MELANCHOLY&quot;, &quot;FROWN&quot;, &quot;HOPELESS&quot;, &quot;AGONIZING&quot;, &quot;BITTER&quot;, &quot;DESPAIR&quot;, &quot;SUFFERING&quot;, &quot;TORMENTED&quot;, &quot;HELPLESS&quot;, &quot;DISTURBED&quot;, &quot;ASHAMED&quot;, &quot;MOURN&quot;, &quot;TORMENT&quot;, &quot;BROKEN&quot;, &quot;WEARY&quot;, &quot;TEARFUL&quot;, &quot;ANXIOUS&quot;, &quot;PESSIMISTIC&quot;, &quot;UPSET&quot;, &quot;DETEST&quot;, &quot;TORTURED&quot;, &quot;OVERWHELMED&quot;, &quot;CRUSHED&quot;, &quot;DOOM&quot;, &quot;TIRED&quot;, &quot;FEARFUL&quot;, &quot;REMORSE&quot;, &quot;DOWNCAST&quot;, &quot;DEMORALIZED&quot;, &quot;MISERY&quot;, &quot;REGRETFUL&quot;, &quot;RUINED&quot;, &quot;PAINFUL&quot;,
+            &quot;DEJECTED&quot;, &quot;DISHEARTENED&quot;, &quot;FORLORN&quot;, &quot;DESPONDENT&quot;, &quot;GLOOMY&quot;, &quot;MOROSE&quot;, &quot;DOWNHEARTED&quot;, &quot;DISMAL&quot;, &quot;SORROWFUL&quot;, &quot;MOURNFUL&quot;, &quot;DOLEFUL&quot;, &quot;LAMENTABLE&quot;, &quot;DESPAIRING&quot;, &quot;DISCONSOLATE&quot;, &quot;CRESTFALLEN&quot;, &quot;WOEFUL&quot;, &quot;INCONSOLABLE&quot;, &quot;DESOLATE&quot;, &quot;WRETCHED&quot;, &quot;DISTRESSED&quot;, &quot;ANGUISHED&quot;, &quot;DISTRAUGHT&quot;, &quot;DISPIRITED&quot;, &quot;MELANCHOLIC&quot;, &quot;HEAVY-HEARTED&quot;, &quot;BROKENHEARTED&quot;, &quot;DOWNTRODDEN&quot;, &quot;CRESTFALLEN&quot;, &quot;GRIM&quot;, &quot;BLEAK&quot;, &quot;DOLOROUS&quot;, &quot;MOURNFUL&quot;, &quot;DEJECTEDLY&quot;, &quot;GLUMLY&quot;, &quot;MISERABLY&quot;, &quot;DESPONDENTLY&quot;, &quot;DESOLATELY&quot;};
+
+<span class="fc" id="L27">    public final static String[] IGNORE_STOP_WORDS = {&quot;A&quot;,&quot;THE&quot;,&quot;IS&quot;,&quot;ARE&quot;,&quot;AND&quot;,&quot;OR&quot;,&quot;BUT&quot;,&quot;NOT&quot;,&quot;TO&quot;,&quot;FOR&quot;,&quot;WITH&quot;,&quot;FROM&quot;,&quot;IN&quot;,&quot;ON&quot;,&quot;AT&quot;,&quot;OF&quot;,&quot;BY&quot;,&quot;AS&quot;,&quot;IF&quot;,&quot;WHEN&quot;,&quot;THEN&quot;,&quot;IT&quot;,&quot;THIS&quot;,&quot;THAT&quot;,&quot;WAS&quot;,&quot;WERE&quot;,&quot;HAS&quot;,&quot;HAVE&quot;,&quot;HAD&quot;,&quot;WHICH&quot;,&quot;WHAT&quot;,&quot;WHY&quot;,&quot;WHO&quot;,&quot;WHOM&quot;,&quot;HOW&quot;,&quot;SOME&quot;,&quot;ANY&quot;,&quot;MANY&quot;,&quot;MORE&quot;,&quot;MOST&quot;,&quot;OTHER&quot;,&quot;EACH&quot;,&quot;EVERY&quot;,&quot;ALL&quot;,&quot;NO&quot;,&quot;NOR&quot;,&quot;SO&quot;,&quot;CAN&quot;,&quot;WILL&quot;,&quot;WOULD&quot;,&quot;SHOULD&quot;,&quot;COULD&quot;,&quot;DID&quot;,&quot;DOES&quot;,&quot;MAY&quot;,&quot;MIGHT&quot;,&quot;MUST&quot;,&quot;SHALL&quot;,&quot;WILL&quot;};</span>
+
+<span class="fc" id="L29">    public final static String[] HAPPY_EMOTICONS = {   &quot;😊&quot;, &quot;😀&quot;, &quot;😄&quot;, &quot;😃&quot;, &quot;🙂&quot;, &quot;😁&quot;, &quot;😆&quot;, &quot;😊&quot;, &quot;😉&quot;, &quot;😍&quot;, &quot;😜&quot;, &quot;😇&quot;, &quot;😭&quot;, &quot;💜&quot;, &quot;😀&quot;, &quot;😊&quot;, &quot;😀&quot;};</span>
+<span class="fc" id="L30">    private static final String[] SAD_EMOTICONS = {&quot;😞&quot;, &quot;😟&quot;, &quot;😔&quot;, &quot;😣&quot;, &quot;😕&quot;};</span>
+
+    public static Sentiment analyzeStreamSentiment(List&lt;String&gt; videoDescriptions) {
+<span class="fc" id="L33">        List&lt;Sentiment&gt; sentiments = videoDescriptions.stream()</span>
+<span class="fc" id="L34">                .parallel()</span>
+<span class="fc" id="L35">                .map(AnalyseSentiment::countSentimentWords).map(AnalyseSentiment::checkSentiment).collect(Collectors.toList());</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        long happyCount = sentiments.stream().filter(sentiment -&gt; sentiment == Sentiment.HAPPY).count();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        long sadCount = sentiments.stream().filter(sentiment -&gt; sentiment == Sentiment.SAD).count();</span>
+
+<span class="fc" id="L39">        double happyRatio = (double) happyCount / videoDescriptions.size();</span>
+<span class="fc" id="L40">        double sadRatio = (double) sadCount / videoDescriptions.size();</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (happyRatio &gt; 0.1) {</span>
+<span class="fc" id="L43">            return Sentiment.HAPPY;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        } else if (sadRatio &gt; 0.1) {</span>
+<span class="fc" id="L45">            return Sentiment.SAD;</span>
+        } else {
+<span class="fc" id="L47">            return Sentiment.NEUTRAL;</span>
+        }
+
+    }
+    /**
+     * Analyzes the sentiment of a stream of video descriptions.
+     * It processes the list of video descriptions to determine whether the overall sentiment is happy, sad, or neutral.
+     *
+     * @param videoDescriptions A list of video descriptions to analyze
+     * @return The overall sentiment of the video descriptions (Happy, Sad, or Neutral)
+     */
+
+    private static SentimentCount countSentimentWords(String description) {
+<span class="fc" id="L60">        String upperDescription = description.toUpperCase();</span>
+
+        // Count all occurrences of happy words
+<span class="fc" id="L63">        long happyCount = Arrays.stream(HAPPY_WORDS)</span>
+<span class="fc" id="L64">                .mapToLong(word -&gt;</span>
+<span class="fc" id="L65">                        Pattern.compile(&quot;\\b&quot; + Pattern.quote(word) + &quot;\\b&quot;)</span>
+<span class="fc" id="L66">                                .matcher(upperDescription)</span>
+<span class="fc" id="L67">                                .results()</span>
+<span class="fc" id="L68">                                .count())</span>
+<span class="fc" id="L69">                .sum();</span>
+
+        // Count all occurrences of sad words
+<span class="fc" id="L72">        long sadCount = Arrays.stream(SAD_WORDS)</span>
+<span class="fc" id="L73">                .mapToLong(word -&gt;</span>
+<span class="fc" id="L74">                        Pattern.compile(&quot;\\b&quot; + Pattern.quote(word) + &quot;\\b&quot;)</span>
+<span class="fc" id="L75">                                .matcher(upperDescription)</span>
+<span class="fc" id="L76">                                .results()</span>
+<span class="fc" id="L77">                                .count())</span>
+<span class="fc" id="L78">                .sum();</span>
+
+        // Count stop words
+<span class="fc" id="L81">        long stopWordsCount = Arrays.stream(IGNORE_STOP_WORDS)</span>
+<span class="fc" id="L82">                .mapToLong(word -&gt;</span>
+<span class="fc" id="L83">                        Pattern.compile(&quot;\\b&quot; + Pattern.quote(word) + &quot;\\b&quot;)</span>
+<span class="fc" id="L84">                                .matcher(upperDescription)</span>
+<span class="fc" id="L85">                                .results()</span>
+<span class="fc" id="L86">                                .count())</span>
+<span class="fc" id="L87">                .sum();</span>
+
+<span class="fc" id="L89">        long totalWords = Arrays.stream(upperDescription.split(&quot;\\b&quot;))</span>
+<span class="fc" id="L90">                .filter(word -&gt; word.matches(&quot;[A-Z]+&quot;))</span>
+<span class="fc" id="L91">                .count() - stopWordsCount;</span>
+<span class="fc" id="L92">        return new SentimentCount(happyCount + countEmoticons(description, HAPPY_EMOTICONS), sadCount + countEmoticons(description, SAD_EMOTICONS),  totalWords);</span>
+    }
+    /**
+     * Counts the number of happy and sad words, emoticons, and stop words in a given video description.
+     *
+     * @param description The video description to analyze
+     * @return A SentimentCount object containing the counts of happy, sad, and total words
+     */
+
+    private static class SentimentCount {
+        long happyCount;
+        long sadCount;
+        long totalCount;
+
+<span class="fc" id="L106">        SentimentCount(long happyCount, long sadCount, long totalCount) {</span>
+<span class="fc" id="L107">            this.happyCount = happyCount;</span>
+<span class="fc" id="L108">            this.sadCount = sadCount;</span>
+<span class="fc" id="L109">            this.totalCount = totalCount;</span>
+
+<span class="fc" id="L111">        }</span>
+
+    }
+    /**
+     * Determines the overall sentiment based on the happy and sad word counts.
+     *
+     * @param sentimentCount The sentiment counts for a given video description
+     * @return The overall sentiment (HAPPY, SAD, or NEUTRAL)
+     */
+    private static Sentiment checkSentiment(SentimentCount count) {
+<span class="fc bfc" id="L121" title="All 4 branches covered.">        if(count.sadCount == 0 &amp;&amp; count.happyCount == 0){</span>
+<span class="fc" id="L122">            return Sentiment.NEUTRAL;</span>
+        }
+
+<span class="fc" id="L125">        double happyPercentage = (double) count.happyCount / (count.sadCount + count.happyCount); // Add 1 to avoid division by 0</span>
+<span class="fc" id="L126">        double sadPercentage = (double) count.sadCount / (count.sadCount + count.happyCount);</span>
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (happyPercentage &gt; Constants.SENTIMENT_THRESHOLD) {</span>
+<span class="fc" id="L129">            return Sentiment.HAPPY;</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        } else if (sadPercentage &gt; Constants.SENTIMENT_THRESHOLD) {</span>
+<span class="fc" id="L131">            return Sentiment.SAD;</span>
+        } else {
+<span class="nc" id="L133">            return Sentiment.NEUTRAL;</span>
+        }
+
+    }
+    /**
+     * Counts the occurrences of emoticons in a given text.
+     *
+     * @param text The text to search for emoticons
+     * @param emoticons The array of emoticons to count in the text
+     * @return The number of occurrences of emoticons in the text
+     */
+    private static long countEmoticons(String text, String[] emoticons) {
+<span class="fc" id="L145">        long count = 0;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        for (String emoticon : emoticons) {</span>
+<span class="fc" id="L147">            count += Pattern.compile(Pattern.quote(emoticon)).matcher(text).results().count();</span>
+        }
+<span class="fc" id="L149">        return count;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

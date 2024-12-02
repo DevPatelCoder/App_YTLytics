@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">UserActor.java</span></div><h1>UserActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import akka.pattern.Patterns;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import models.data.Constants;
+import models.data.VideoSearchData;
+import scala.concurrent.Future;
+import java.util.Map;
+import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.CompletionStage;
+
+import static akka.pattern.Patterns.pipe;
+import static scala.compat.java8.FutureConverters.toJava;
+
+/**
+ * The {@code UserActor} class represents an Akka actor responsible for managing user interactions
+ * and handling WebSocket communication for search operations.
+ *
+ * &lt;p&gt;This actor communicates with a {@code CacheManagerActor} to fetch search results for user-provided
+ * search terms and sends responses back to the WebSocket. It also manages a list of recent search terms
+ * and periodically refreshes the cache for those searches using a timer.
+ */
+public class UserActor extends AbstractActor {
+    /**
+     * Logger instance for logging information and errors related to {@code UserActor}.
+     */
+<span class="fc" id="L34">    private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);</span>
+
+    /**
+     * Queue to store recent search terms entered by the user.
+     */
+<span class="fc" id="L39">    private final Queue&lt;String&gt; recentSearches = new LinkedList&lt;&gt;();</span>
+    /**
+     * Actor reference for WebSocket communication.
+     */
+    private final ActorRef webSocketOut;
+    /**
+     * Actor reference for the {@code CacheManagerActor}.
+     */
+    private final ActorRef cacheManagerActor;
+    /**
+     * Actor reference for the timer actor used for periodic cache refresh operations.
+     */
+    private ActorRef timerActor;
+
+    /**
+     * Message type used to trigger cache refresh operations.
+     */
+<span class="fc" id="L56">    public static class RefreshCache {}</span>
+
+    /**
+     * Invoked when the actor starts. Initializes and starts the timer actor for periodic cache refresh.
+     */
+    @Override
+    public void preStart() {
+        try {
+<span class="fc" id="L64">            timerActor = getContext().actorOf(</span>
+<span class="fc" id="L65">                    UserRefreshTimerActor.props(),</span>
+                    &quot;user-cache-refresh-timer&quot;
+            );
+
+            // Start the refresh timer with 10-second interval
+<span class="fc" id="L70">            timerActor.tell(</span>
+                    new UserRefreshTimerActor.StartTimer(&quot;userSearchRefresh&quot;, Constants.REFRESH_USER_PAGE_RATE_IN_SECONDS),
+<span class="fc" id="L72">                    getSelf()</span>
+            );
+<span class="nc" id="L74">        } catch (Exception e) {</span>
+<span class="nc" id="L75">            log.error(e, &quot;Error starting timer actor: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L76">            throw e; // Let supervisor handle this</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Factory method for creating {@code Props} for this actor.
+     *
+     * @param out              The WebSocket actor for communication.
+     * @param cacheManagerActor The actor managing cached search results.
+     * @return A {@code Props} instance for creating a {@code UserActor}.
+     */
+    public static Props props(ActorRef out, ActorRef cacheManagerActor) {
+<span class="fc" id="L88">        return Props.create(UserActor.class, out, cacheManagerActor);</span>
+    }
+
+    /**
+     * Constructs a {@code UserActor}.
+     *
+     * @param webSocketOut      The WebSocket actor for communication.
+     * @param cacheManagerActor The actor managing cached search results.
+     */
+    @Inject
+<span class="fc" id="L98">    public UserActor(ActorRef webSocketOut, ActorRef cacheManagerActor) {</span>
+<span class="fc" id="L99">        this.webSocketOut = webSocketOut;</span>
+<span class="fc" id="L100">        this.cacheManagerActor = cacheManagerActor;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Refreshes the cache for recent search terms by sending requests to the {@code CacheManagerActor}.
+     */
+    private void refreshRecentSearches() {
+<span class="fc" id="L107">        log.info(&quot;Starting cache refresh for {} recent searches&quot;, recentSearches.size());</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (String searchTerm : recentSearches) {</span>
+
+            try {
+//                searchTerm = searchTerm + &quot; testingd&quot;; //TODO remove this line
+<span class="fc" id="L112">                Future&lt;Object&gt; future = Patterns.ask(cacheManagerActor,</span>
+                        new CacheManagerActor.SearchRequest(searchTerm),
+                        60000
+                );
+
+<span class="fc" id="L117">                pipe(toJava(future)</span>
+<span class="fc" id="L118">                                .thenApply(this::processSearchResult)</span>
+<span class="fc" id="L119">                                .exceptionally(this::handleSearchError),</span>
+<span class="fc" id="L120">                        getContext().dispatcher())</span>
+<span class="fc" id="L121">                        .to(webSocketOut);</span>
+<span class="nc" id="L122">            } catch (Exception e) {</span>
+<span class="nc" id="L123">                log.error(e, &quot;Unexpected error during search refresh: {}&quot;, e.getMessage());</span>
+                // Send error message to WebSocket
+<span class="nc" id="L125">                sendErrorToWebSocket(&quot;Search refresh failed: &quot; + e.getMessage());</span>
+<span class="fc" id="L126">            }</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Processes the search result obtained from the {@code CacheManagerActor}.
+     *
+     * @param result The search result object.
+     * @return A JSON string representation of the result, or an error message if processing fails.
+     */
+    private String processSearchResult(Object result) {
+        try {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (result instanceof VideoSearchData) {</span>
+<span class="nc" id="L139">                ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L140">                return mapper.writeValueAsString(result);</span>
+            }
+<span class="nc" id="L142">            return result.toString();</span>
+<span class="nc" id="L143">        } catch (Exception e) {</span>
+<span class="nc" id="L144">            log.error(&quot;Error processing search result&quot;, e);</span>
+<span class="nc" id="L145">            return &quot;Error processing search result&quot;;</span>
+        }
+    }
+
+    /**
+     * Handles errors that occur during the search process.
+     *
+     * @param throwable The error that occurred.
+     * @return A string representing the error message.
+     */
+    private String handleSearchError(Throwable throwable) {
+<span class="nc" id="L156">        log.error(throwable, &quot;Error in search process: {}&quot;, throwable.getMessage());</span>
+<span class="nc" id="L157">        return &quot;Search error: &quot; + throwable.getMessage();</span>
+    }
+
+    /**
+     * Sends an error message to the WebSocket in JSON format.
+     *
+     * @param errorMessage The error message to be sent.
+     */
+    private void sendErrorToWebSocket(String errorMessage) {
+        try {
+<span class="nc" id="L167">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L168">            String jsonError = mapper.writeValueAsString(</span>
+<span class="nc" id="L169">                    Map.of(&quot;error&quot;, errorMessage)</span>
+            );
+<span class="nc" id="L171">            webSocketOut.tell(jsonError, getSelf());</span>
+<span class="nc" id="L172">        } catch (Exception e) {</span>
+<span class="nc" id="L173">            log.error(e, &quot;Could not send error to WebSocket&quot;);</span>
+<span class="nc" id="L174">        }</span>
+<span class="nc" id="L175">    }</span>
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code String}: Represents a search term entered by the user.&lt;/li&gt;
+     *     &lt;li&gt;{@code RefreshCache}: Triggers the cache refresh operation.&lt;/li&gt;
+     *     &lt;li&gt;Any other message: Logs a warning for unrecognized messages.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L191">        return receiveBuilder()</span>
+<span class="fc" id="L192">                .match(String.class, searchTerm -&gt; {</span>
+                    try {
+                        // Store search term
+<span class="fc bfc" id="L195" title="All 2 branches covered.">                        if (recentSearches.size() &gt;= Constants.MAX_VIDEOS_DISPLAY_COUNT) {</span>
+<span class="fc" id="L196">                            recentSearches.poll();</span>
+                        }
+<span class="fc" id="L198">                        recentSearches.offer(searchTerm);</span>
+
+                        // Send initial search request to CacheManagerActor
+<span class="fc" id="L201">                        Future&lt;Object&gt; future = Patterns.ask(cacheManagerActor,</span>
+                                new CacheManagerActor.SearchRequest(searchTerm),
+                                60000
+                        );
+
+<span class="fc" id="L206">                        pipe(toJava(future)</span>
+<span class="fc" id="L207">                                        .thenApply(this::processSearchResult)</span>
+<span class="fc" id="L208">                                        .exceptionally(this::handleSearchError),</span>
+<span class="fc" id="L209">                                getContext().dispatcher())</span>
+<span class="fc" id="L210">                                .to(webSocketOut);</span>
+<span class="nc" id="L211">                    } catch (Exception e) {</span>
+<span class="nc" id="L212">                        log.error(e, &quot;Error processing search term: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L213">                        sendErrorToWebSocket(&quot;Search processing failed: &quot; + e.getMessage());</span>
+<span class="fc" id="L214">                    }</span>
+<span class="fc" id="L215">                })</span>
+                // Add handler for TimerTick
+<span class="fc" id="L217">                .match(RefreshCache.class, msg -&gt; refreshRecentSearches())</span>
+<span class="fc" id="L218">                .matchAny(msg -&gt; {</span>
+<span class="fc" id="L219">                    log.warning(&quot;Received unknown message: {}&quot;, msg);</span>
+<span class="fc" id="L220">                })</span>
+<span class="fc" id="L221">                .build();</span>
+    }
+
+    /**
+     * Invoked when the actor is stopped. Stops the timer actor if it exists.
+     */
+    @Override
+    public void postStop() {
+        // Stop the timer when the UserActor is stopped
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (timerActor != null) {</span>
+<span class="fc" id="L231">            timerActor.tell(</span>
+                    new UserRefreshTimerActor.StopTimer(&quot;userSearchRefresh&quot;),
+<span class="fc" id="L233">                    getSelf()</span>
+            );
+        }
+<span class="fc" id="L236">        log.info(&quot;UserActor is stopping&quot;);</span>
+<span class="fc" id="L237">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

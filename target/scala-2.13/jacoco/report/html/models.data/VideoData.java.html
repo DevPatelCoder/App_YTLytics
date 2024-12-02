@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VideoData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.data</a> &gt; <span class="el_source">VideoData.java</span></div><h1>VideoData.java</h1><pre class="source lang-java linenums">package models.data;
+
+import java.util.List;
+
+/**
+ * Represents data associated with a video, including the video ID, title, channel information,
+ * thumbnail URL, description, tags, and sentiment.
+ * This class also provides methods to generate URLs for the video and channel.
+ *
+ */
+public class VideoData {
+
+    /** The unique identifier for the video. */
+    private String videoId;
+
+    /** The title of the video. */
+    private String title;
+
+    /** The title of the channel that posted the video. */
+    private String channelTitle;
+
+    /** The unique identifier for the channel. */
+    private String channelId;
+
+    /** The URL of the video's thumbnail. */
+    private String thumbnailUrl;
+
+    /** The description of the video. */
+    private String description;
+
+    /** A list of tags associated with the video. */
+    private List&lt;String&gt; tags;
+
+    /** The sentiment of the video description. */
+    private String sentiment;
+
+    /**
+     * Constructs a new VideoData object with the provided details about the video.
+     *
+     * @param videoId the unique identifier of the video
+     * @param title the title of the video
+     * @param channelTitle the title of the channel
+     * @param channelId the unique identifier for the channel
+     * @param thumbnailUrl the URL of the video's thumbnail
+     * @param description the description of the video
+     */
+<span class="fc" id="L47">    public VideoData(String videoId, String title, String channelTitle, String channelId, String thumbnailUrl, String description) {</span>
+<span class="fc" id="L48">        this.videoId = videoId;</span>
+<span class="fc" id="L49">        this.title = title;</span>
+<span class="fc" id="L50">        this.channelTitle = channelTitle;</span>
+<span class="fc" id="L51">        this.channelId = channelId; // Assign the channel ID</span>
+<span class="fc" id="L52">        this.thumbnailUrl = thumbnailUrl;</span>
+<span class="fc" id="L53">        this.description = description;</span>
+<span class="fc" id="L54">    }</span>
+
+<span class="nc" id="L56">    public VideoData(String id1, String title, String channelTitle, String thumbnail1) {</span>
+<span class="nc" id="L57">    }</span>
+
+    /**
+     * Gets the unique identifier of the video.
+     *
+     * @return the video ID
+     */
+    public String getVideoId() {
+<span class="fc" id="L65">        return videoId;</span>
+    }
+
+    /**
+     * Gets the title of the video.
+     *
+
+     */
+    public String getTitle() {
+<span class="fc" id="L74">        return title;</span>
+    }
+
+    /**
+     * Gets the title of the channel that posted the video
+     */
+    public String getChannelTitle() {
+<span class="fc" id="L81">        return channelTitle;</span>
+    }
+
+    /**
+     * Gets the unique identifier of the channel.
+     *
+     * @return the channel ID
+     */
+    public String getChannelId() {
+<span class="fc" id="L90">        return channelId; // Getter for channel ID</span>
+    }
+
+    /**
+     * Gets the URL of the video's thumbnail.
+     *
+     * @return the thumbnail URL
+     */
+    public String getThumbnailUrl() {
+<span class="fc" id="L99">        return thumbnailUrl;</span>
+    }
+
+    /**
+     * Gets the description of the video.
+     *
+     * @return the video description
+     */
+    public String getDescription() {
+<span class="fc" id="L108">        return description;</span>
+    }
+
+    /**
+     * Generates and returns the URL for the video on YouTube.
+     *
+     * @return the YouTube video URL
+     */
+    public String getVideoUrl() {
+<span class="fc" id="L117">        return &quot;https://www.youtube.com/watch?v=&quot; + videoId;</span>
+    }
+
+    /**
+     * Generates and returns the URL for the channel's YouTube page.
+     *
+     * @return the YouTube channel URL
+     */
+    public String getChannelUrl() {
+<span class="nc" id="L126">        return &quot;https://www.youtube.com/channel/&quot; + channelId; // Properly create the channel URL</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SentimentActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">SentimentActor.java</span></div><h1>SentimentActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.Props;
+import akka.actor.Status;
+import models.api.YouTubeService;
+import models.data.Constants;
+import models.data.Sentiment;
+
+import java.io.IOException;
+
+/**
+ * The {@code SentimentActor} is responsible for performing sentiment analysis on YouTube data.
+ *
+ * &lt;p&gt;This actor communicates with the {@code YouTubeService} to fetch and analyze the sentiment of video descriptions
+ * based on a provided search term. It handles incoming requests for sentiment analysis and responds with the results or errors.
+ */
+public class SentimentActor extends AbstractActor {
+    private final YouTubeService youTubeService;
+
+    /**
+     * Constructs a {@code SentimentActor}.
+     *
+     * @param youTubeService The service used to perform sentiment analysis on YouTube data.
+     */
+<span class="fc" id="L26">    public SentimentActor(YouTubeService youTubeService) {</span>
+<span class="fc" id="L27">        this.youTubeService = youTubeService;</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Factory method to create {@code Props} for this actor.
+     *
+     * @param youTubeService The service used to perform sentiment analysis.
+     * @return A {@code Props} instance for creating this actor.
+     */
+    public static Props props(YouTubeService youTubeService) {
+<span class="fc" id="L37">        return Props.create(SentimentActor.class, () -&gt; new SentimentActor(youTubeService));</span>
+    }
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code AnalyzeSentimentRequest}: Triggers sentiment analysis for the provided search term.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L52">        return receiveBuilder()</span>
+<span class="fc" id="L53">                .match(AnalyzeSentimentRequest.class, this::handleSentimentAnalysis)</span>
+<span class="fc" id="L54">                .build();</span>
+    }
+
+    /**
+     * Handles sentiment analysis requests.
+     *
+     * &lt;p&gt;Uses the {@code YouTubeService} to perform sentiment analysis on video descriptions related to the search term.
+     * Sends the result back to the sender or reports a failure if an exception occurs.
+     *
+     * @param request The request containing the search term for sentiment analysis.
+     */
+    private void handleSentimentAnalysis(AnalyzeSentimentRequest request) {
+        try {
+<span class="fc" id="L67">            Sentiment sentiment = youTubeService.getSentimentalAnalysis(</span>
+                    request.searchTerm,
+                    Constants.MAX_DESC_SENTIMENT_COUNT
+            );
+<span class="fc" id="L71">            getSender().tell(new AnalyzeSentimentResponse(sentiment), getSelf());</span>
+<span class="fc" id="L72">        } catch (IOException e) {</span>
+<span class="fc" id="L73">            getSender().tell(new Status.Failure(e), getSelf());</span>
+<span class="fc" id="L74">        }</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Represents a request to perform sentiment analysis.
+     */
+    public static class AnalyzeSentimentRequest {
+        /**
+         * The search term for which sentiment analysis is to be performed.
+         */
+        public final String searchTerm;
+        /**
+         * Constructs an {@code AnalyzeSentimentRequest}.
+         *
+         * @param searchTerm The search term for sentiment analysis.
+         */
+<span class="fc" id="L90">        public AnalyzeSentimentRequest(String searchTerm) {</span>
+<span class="fc" id="L91">            this.searchTerm = searchTerm;</span>
+<span class="fc" id="L92">        }</span>
+    }
+    /**
+     * Represents the response containing the sentiment analysis result.
+     */
+    public static class AnalyzeSentimentResponse {
+        /**
+         * The result of the sentiment analysis.
+         */
+        public final Sentiment sentiment;
+        /**
+         * Constructs an {@code AnalyzeSentimentResponse}.
+         *
+         * @param sentiment The sentiment analysis result.
+         */
+<span class="fc" id="L107">        public AnalyzeSentimentResponse(Sentiment sentiment) {</span>
+<span class="fc" id="L108">            this.sentiment = sentiment;</span>
+<span class="fc" id="L109">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

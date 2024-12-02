@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Converter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.helper</a> &gt; <span class="el_source">Converter.java</span></div><h1>Converter.java</h1><pre class="source lang-java linenums">package models.helper;
+
+import com.google.api.services.youtube.model.Channel;
+import com.google.api.services.youtube.model.SearchResult;
+import models.data.ChannelMetaData;
+import models.data.ChannelVideoData;
+import models.data.Constants;
+import models.data.VideoData;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * This class contains utility methods for converting data from YouTube API objects to custom data model objects.
+ * It provides methods for converting search results to video data and channel video data.
+ *
+ */
+<span class="nc" id="L19">public class Converter {</span>
+
+    /**
+     * Converts a list of YouTube search results to a list of {@link VideoData} objects.
+     *
+     * @param results the list of YouTube search results
+     * @return a list of {@link VideoData} objects representing the YouTube videos
+     */
+    public static List&lt;VideoData&gt; convertToVideoData(List&lt;SearchResult&gt; results) {
+<span class="fc" id="L28">        return results.stream()</span>
+<span class="fc" id="L29">                .map(result -&gt; new VideoData(</span>
+<span class="fc" id="L30">                        result.getId().getVideoId(),</span>
+<span class="fc" id="L31">                        result.getSnippet().getTitle(),</span>
+<span class="fc" id="L32">                        result.getSnippet().getChannelTitle(),</span>
+<span class="fc" id="L33">                        result.getSnippet().getChannelId(),</span>
+<span class="fc" id="L34">                        result.getSnippet().getThumbnails().getDefault().getUrl(),</span>
+<span class="fc" id="L35">                        result.getSnippet().getDescription()</span>
+                ))
+<span class="fc" id="L37">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Converts a list of YouTube search results to a {@link ChannelVideoData} object,
+     * including channel information from the YouTube API.
+     *
+     * @param results the list of YouTube search results
+     * @param channelId the ID of the channel
+     * @param channelInfo the channel's information retrieved from the YouTube API
+     * @return a {@link ChannelVideoData} object containing the video and channel information
+     */
+    public static ChannelVideoData convertToChannelVideoData(List&lt;SearchResult&gt; results, String channelId, Channel channelInfo) {
+<span class="fc" id="L50">        List&lt;VideoData&gt; videos = results.stream()</span>
+<span class="fc" id="L51">                .map(result -&gt; new VideoData(</span>
+<span class="fc" id="L52">                        result.getId().getVideoId(),</span>
+<span class="fc" id="L53">                        result.getSnippet().getTitle(),</span>
+<span class="fc" id="L54">                        channelInfo.getSnippet().getTitle(),</span>
+                        channelId,
+<span class="fc" id="L56">                        result.getSnippet().getThumbnails().getDefault().getUrl(),</span>
+<span class="fc" id="L57">                        result.getSnippet().getDescription()</span>
+                ))
+<span class="fc" id="L59">                .collect(Collectors.toList());</span>
+<span class="fc" id="L60">        ChannelMetaData channelMetaData = new ChannelMetaData();</span>
+<span class="fc" id="L61">        channelMetaData.setTitle(channelInfo.getSnippet().getTitle());</span>
+<span class="fc" id="L62">        channelMetaData.setDescription(channelInfo.getSnippet().getDescription());</span>
+<span class="fc" id="L63">        channelMetaData.setSubscriberCount(channelInfo.getStatistics().getSubscriberCount());</span>
+<span class="fc" id="L64">        channelMetaData.setViewCount(channelInfo.getStatistics().getViewCount());</span>
+<span class="fc" id="L65">        channelMetaData.setVideoCount(channelInfo.getStatistics().getVideoCount());</span>
+<span class="fc" id="L66">        channelMetaData.setVideoIds(videos.stream().map(VideoData::getVideoId).collect(Collectors.toList()));</span>
+<span class="fc" id="L67">        return new ChannelVideoData(videos, channelMetaData);</span>
+    }
+
+    /**
+     * Updates the search session string by appending the new query and ensuring uniqueness.
+     * It limits the number of entries to a maximum defined by {@link Constants#MAX_VIDEOS_DISPLAY_COUNT}.
+     *
+     * @param query the new search query
+     * @param currentSession the current search session string
+     * @return the updated search session string
+     */
+    public static String getUpdatedSearchSession(String query, String currentSession) {
+<span class="nc" id="L79">        currentSession = query + &quot;,&quot; + currentSession;</span>
+
+<span class="nc" id="L81">        return Arrays.stream(currentSession.split(&quot;,&quot;))</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                .filter(e -&gt; !e.isEmpty())</span>
+<span class="nc" id="L83">                .map(k -&gt; k.toLowerCase().trim())</span>
+<span class="nc" id="L84">                .distinct()</span>
+<span class="nc" id="L85">                .limit(Constants.MAX_VIDEOS_DISPLAY_COUNT)</span>
+<span class="nc" id="L86">                .collect(Collectors.joining(&quot;,&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

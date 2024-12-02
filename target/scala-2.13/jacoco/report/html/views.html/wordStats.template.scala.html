@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>wordStats.template.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">views.html</a> &gt; <span class="el_source">wordStats.template.scala</span></div><h1>wordStats.template.scala</h1><pre class="source lang-java linenums">
+package views.html
+
+import _root_.play.twirl.api.TwirlFeatureImports._
+import _root_.play.twirl.api.TwirlHelperImports._
+import _root_.play.twirl.api.Html
+import _root_.play.twirl.api.JavaScript
+import _root_.play.twirl.api.Txt
+import _root_.play.twirl.api.Xml
+import models._
+import controllers._
+import play.api.i18n._
+import views.html._
+import play.api.templates.PlayMagic._
+import java.lang._
+import java.util._
+import play.core.j.PlayMagicForJava._
+import play.mvc._
+import play.api.data.Field
+import play.data._
+import play.core.j.PlayFormsMagicForJava._
+import scala.jdk.CollectionConverters._
+/*1.2*/import models.data.WordStatData
+
+<span class="pc" id="L25">object wordStats extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[WordStatData,play.twirl.api.HtmlFormat.Appendable] {</span>
+
+  /**/
+  def apply/*2.2*/(wordStats: WordStatData):play.twirl.api.HtmlFormat.Appendable = {
+<span class="fc" id="L29">    _display_ {</span>
+      {
+
+
+<span class="fc" id="L33">Seq[Any](format.raw/*2.27*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L35">&quot;&quot;&quot;),_display_(/*4.2*/main(&quot;Word Stats&quot;)/*4.20*/ {_display_(Seq[Any](format.raw/*4.22*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L36">&quot;&quot;&quot;),format.raw/*5.1*/(&quot;&quot;&quot;&lt;style&gt;</span>
+<span class="fc" id="L37">        body &quot;&quot;&quot;),format.raw/*6.14*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*6.15*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L38">            &quot;&quot;&quot;),format.raw/*7.13*/(&quot;&quot;&quot;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</span>
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+<span class="fc" id="L43">        &quot;&quot;&quot;),format.raw/*12.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*12.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L45">        &quot;&quot;&quot;),format.raw/*14.9*/(&quot;&quot;&quot;.container &quot;&quot;&quot;),format.raw/*14.20*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*14.21*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L46">            &quot;&quot;&quot;),format.raw/*15.13*/(&quot;&quot;&quot;width: 90%;</span>
+            max-width: 1000px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 50px auto;
+<span class="fc" id="L53">        &quot;&quot;&quot;),format.raw/*22.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*22.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L55">        &quot;&quot;&quot;),format.raw/*24.9*/(&quot;&quot;&quot;h2 &quot;&quot;&quot;),format.raw/*24.12*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*24.13*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L56">            &quot;&quot;&quot;),format.raw/*25.13*/(&quot;&quot;&quot;font-size: 32px;</span>
+            color: #2e3a59;
+            margin-bottom: 20px;
+            text-align: center;
+<span class="fc" id="L60">        &quot;&quot;&quot;),format.raw/*29.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*29.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L62">        &quot;&quot;&quot;),format.raw/*31.9*/(&quot;&quot;&quot;h3 &quot;&quot;&quot;),format.raw/*31.12*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*31.13*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L63">            &quot;&quot;&quot;),format.raw/*32.13*/(&quot;&quot;&quot;font-size: 24px;</span>
+            color: #4f5b74;
+            margin-bottom: 15px;
+            text-align: center;
+<span class="fc" id="L67">        &quot;&quot;&quot;),format.raw/*36.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*36.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L69">        &quot;&quot;&quot;),format.raw/*38.9*/(&quot;&quot;&quot;table &quot;&quot;&quot;),format.raw/*38.15*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*38.16*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L70">            &quot;&quot;&quot;),format.raw/*39.13*/(&quot;&quot;&quot;width: 100%;</span>
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+<span class="fc" id="L75">        &quot;&quot;&quot;),format.raw/*44.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*44.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L77">        &quot;&quot;&quot;),format.raw/*46.9*/(&quot;&quot;&quot;th, td &quot;&quot;&quot;),format.raw/*46.16*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*46.17*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L78">            &quot;&quot;&quot;),format.raw/*47.13*/(&quot;&quot;&quot;padding: 12px 15px;</span>
+            text-align: left;
+<span class="fc" id="L80">        &quot;&quot;&quot;),format.raw/*49.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*49.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L82">        &quot;&quot;&quot;),format.raw/*51.9*/(&quot;&quot;&quot;th &quot;&quot;&quot;),format.raw/*51.12*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*51.13*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L83">            &quot;&quot;&quot;),format.raw/*52.13*/(&quot;&quot;&quot;background-color: #007bff;</span>
+            color: #fff;
+            font-weight: bold;
+<span class="fc" id="L86">        &quot;&quot;&quot;),format.raw/*55.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*55.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L88">        &quot;&quot;&quot;),format.raw/*57.9*/(&quot;&quot;&quot;td &quot;&quot;&quot;),format.raw/*57.12*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*57.13*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L89">            &quot;&quot;&quot;),format.raw/*58.13*/(&quot;&quot;&quot;background-color: #fafafa;</span>
+            border: 1px solid #e2e2e2;
+<span class="fc" id="L91">        &quot;&quot;&quot;),format.raw/*60.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*60.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L93">        &quot;&quot;&quot;),format.raw/*62.9*/(&quot;&quot;&quot;tr:hover td &quot;&quot;&quot;),format.raw/*62.21*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*62.22*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L94">            &quot;&quot;&quot;),format.raw/*63.13*/(&quot;&quot;&quot;background-color: #f9f9f9;</span>
+            border-color: #d0d0d0;
+<span class="fc" id="L96">        &quot;&quot;&quot;),format.raw/*65.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*65.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L98">        &quot;&quot;&quot;),format.raw/*67.9*/(&quot;&quot;&quot;.no-stats &quot;&quot;&quot;),format.raw/*67.19*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*67.20*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L99">            &quot;&quot;&quot;),format.raw/*68.13*/(&quot;&quot;&quot;color: #777;</span>
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+<span class="fc" id="L103">        &quot;&quot;&quot;),format.raw/*72.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*72.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L105">        &quot;&quot;&quot;),format.raw/*74.9*/(&quot;&quot;&quot;.btn &quot;&quot;&quot;),format.raw/*74.14*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*74.15*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L106">            &quot;&quot;&quot;),format.raw/*75.13*/(&quot;&quot;&quot;background-color: #007bff;</span>
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+<span class="fc" id="L118">        &quot;&quot;&quot;),format.raw/*87.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*87.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L120">        &quot;&quot;&quot;),format.raw/*89.9*/(&quot;&quot;&quot;.btn:hover &quot;&quot;&quot;),format.raw/*89.20*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*89.21*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L121">            &quot;&quot;&quot;),format.raw/*90.13*/(&quot;&quot;&quot;background-color: #0056b3;</span>
+<span class="fc" id="L122">        &quot;&quot;&quot;),format.raw/*91.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*91.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L124">        &quot;&quot;&quot;),format.raw/*93.9*/(&quot;&quot;&quot;footer &quot;&quot;&quot;),format.raw/*93.16*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*93.17*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L125">            &quot;&quot;&quot;),format.raw/*94.13*/(&quot;&quot;&quot;margin-top: 40px;</span>
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+<span class="fc" id="L129">        &quot;&quot;&quot;),format.raw/*98.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*98.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L131">        &quot;&quot;&quot;),format.raw/*100.9*/(&quot;&quot;&quot;footer a &quot;&quot;&quot;),format.raw/*100.18*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*100.19*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L132">            &quot;&quot;&quot;),format.raw/*101.13*/(&quot;&quot;&quot;color: #007bff;</span>
+            text-decoration: none;
+<span class="fc" id="L134">        &quot;&quot;&quot;),format.raw/*103.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*103.10*/(&quot;&quot;&quot;</span>
+
+<span class="fc" id="L136">        &quot;&quot;&quot;),format.raw/*105.9*/(&quot;&quot;&quot;footer a:hover &quot;&quot;&quot;),format.raw/*105.24*/(&quot;&quot;&quot;{&quot;&quot;&quot;),format.raw/*105.25*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L137">            &quot;&quot;&quot;),format.raw/*106.13*/(&quot;&quot;&quot;text-decoration: underline;</span>
+<span class="fc" id="L138">        &quot;&quot;&quot;),format.raw/*107.9*/(&quot;&quot;&quot;}&quot;&quot;&quot;),format.raw/*107.10*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L139">    &quot;&quot;&quot;),format.raw/*108.5*/(&quot;&quot;&quot;&lt;/style&gt;</span>
+
+&lt;div class=&quot;container&quot;&gt;
+    &lt;h2&gt;Word Statistics&lt;/h2&gt;
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">    &quot;&quot;&quot;),_display_(if(wordStats.getWordCount().isEmpty)/*113.42*/ {_display_(Seq[Any](format.raw/*113.44*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L145">    &quot;&quot;&quot;),format.raw/*114.5*/(&quot;&quot;&quot;&lt;p class=&quot;no-stats&quot;&gt;No word statistics available.&lt;/p&gt;</span>
+<span class="pc" id="L146">    &quot;&quot;&quot;)))}else/*115.12*/{_display_(Seq[Any](format.raw/*115.13*/(&quot;&quot;&quot;</span>
+<span class="nc" id="L147">    &quot;&quot;&quot;),format.raw/*116.5*/(&quot;&quot;&quot;&lt;h3&gt;&quot;&quot;&quot;),_display_(/*116.10*/wordStats/*116.19*/.getSearch()),format.raw/*116.31*/(&quot;&quot;&quot;&lt;/h3&gt;</span>
+    &lt;table&gt;
+        &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Word&lt;/th&gt;
+            &lt;th&gt;Frequency&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+<span class="nc" id="L156">        &quot;&quot;&quot;),_display_(/*125.10*/for((word, count) &lt;- wordStats.getWordCount().toSeq.sortBy(-_._2)) yield /*125.76*/ {_display_(Seq[Any](format.raw/*125.78*/(&quot;&quot;&quot;</span>
+        &quot;&quot;&quot;),format.raw/*126.9*/(&quot;&quot;&quot;&lt;tr&gt;
+            &lt;td&gt;&quot;&quot;&quot;),_display_(/*127.18*/word),format.raw/*127.22*/(&quot;&quot;&quot;&lt;/td&gt;
+            &lt;td&gt;&quot;&quot;&quot;),_display_(/*128.18*/count),format.raw/*128.23*/(&quot;&quot;&quot;&lt;/td&gt;
+        &lt;/tr&gt;
+<span class="nc" id="L161">        &quot;&quot;&quot;)))}),format.raw/*130.10*/(&quot;&quot;&quot;</span>
+<span class="nc" id="L162">        &quot;&quot;&quot;),format.raw/*131.9*/(&quot;&quot;&quot;&lt;/tbody&gt;</span>
+    &lt;/table&gt;
+    &lt;button class=&quot;btn&quot; onclick=&quot;window.print()&quot;&gt;Print Statistics&lt;/button&gt;
+<span class="fc" id="L165">    &quot;&quot;&quot;)))}),format.raw/*134.6*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L166">&quot;&quot;&quot;),format.raw/*135.1*/(&quot;&quot;&quot;&lt;/div&gt;</span>
+
+&lt;footer&gt;
+    &lt;p&gt;Powered by &lt;a href=&quot;#&quot;&gt;Your Company&lt;/a&gt; | &lt;a href=&quot;#&quot;&gt;Privacy Policy&lt;/a&gt; | &lt;a href=&quot;#&quot;&gt;Terms of Service&lt;/a&gt;&lt;/p&gt;
+&lt;/footer&gt;
+
+&lt;script&gt;
+        // Optional JavaScript for enhanced interactivity (if needed)
+    &lt;/script&gt;
+<span class="fc" id="L175">&quot;&quot;&quot;)))}),format.raw/*144.2*/(&quot;&quot;&quot;</span>
+&quot;&quot;&quot;))
+      }
+    }
+  }
+
+<span class="fc" id="L181">  def render(wordStats:WordStatData): play.twirl.api.HtmlFormat.Appendable = apply(wordStats)</span>
+
+<span class="nc" id="L183">  def f:((WordStatData) =&gt; play.twirl.api.HtmlFormat.Appendable) = (wordStats) =&gt; apply(wordStats)</span>
+
+<span class="nc" id="L185">  def ref: this.type = this</span>
+
+}
+
+
+              /*
+                  -- GENERATED --
+                  SOURCE: app/views/wordStats.scala.html
+                  HASH: 42f618d2ec221d2f358e06010f592e831463a134
+                  MATRIX: 610-&gt;1|956-&gt;35|1076-&gt;60|1106-&gt;65|1132-&gt;83|1171-&gt;85|1199-&gt;87|1248-&gt;109|1276-&gt;110|1317-&gt;124|1530-&gt;310|1559-&gt;311|1598-&gt;323|1637-&gt;334|1666-&gt;335|1708-&gt;349|1974-&gt;588|2003-&gt;589|2042-&gt;601|2073-&gt;604|2102-&gt;605|2144-&gt;619|2293-&gt;741|2322-&gt;742|2361-&gt;754|2392-&gt;757|2421-&gt;758|2463-&gt;772|2612-&gt;894|2641-&gt;895|2680-&gt;907|2714-&gt;913|2743-&gt;914|2785-&gt;928|2961-&gt;1077|2990-&gt;1078|3029-&gt;1090|3064-&gt;1097|3093-&gt;1098|3135-&gt;1112|3222-&gt;1172|3251-&gt;1173|3290-&gt;1185|3321-&gt;1188|3350-&gt;1189|3392-&gt;1203|3513-&gt;1297|3542-&gt;1298|3581-&gt;1310|3612-&gt;1313|3641-&gt;1314|3683-&gt;1328|3786-&gt;1404|3815-&gt;1405|3854-&gt;1417|3894-&gt;1429|3923-&gt;1430|3965-&gt;1444|4064-&gt;1516|4093-&gt;1517|4132-&gt;1529|4170-&gt;1539|4199-&gt;1540|4241-&gt;1554|4384-&gt;1670|4413-&gt;1671|4452-&gt;1683|4485-&gt;1688|4514-&gt;1689|4556-&gt;1703|4972-&gt;2092|5001-&gt;2093|5040-&gt;2105|5079-&gt;2116|5108-&gt;2117|5150-&gt;2131|5213-&gt;2167|5242-&gt;2168|5281-&gt;2180|5316-&gt;2187|5345-&gt;2188|5387-&gt;2202|5530-&gt;2318|5559-&gt;2319|5599-&gt;2331|5637-&gt;2340|5667-&gt;2341|5710-&gt;2355|5799-&gt;2416|5829-&gt;2417|5869-&gt;2429|5913-&gt;2444|5943-&gt;2445|5986-&gt;2459|6051-&gt;2496|6081-&gt;2497|6115-&gt;2503|6253-&gt;2613|6294-&gt;2615|6328-&gt;2621|6412-&gt;2687|6452-&gt;2688|6486-&gt;2694|6519-&gt;2699|6538-&gt;2708|6572-&gt;2720|6769-&gt;2889|6852-&gt;2955|6893-&gt;2957|6931-&gt;2967|6982-&gt;2990|7008-&gt;2994|7060-&gt;3018|7087-&gt;3023|7150-&gt;3054|7188-&gt;3064|7324-&gt;3169|7354-&gt;3171|7635-&gt;3421
+                  LINES: 23-&gt;1|28-&gt;2|33-&gt;2|35-&gt;4|35-&gt;4|35-&gt;4|36-&gt;5|37-&gt;6|37-&gt;6|38-&gt;7|43-&gt;12|43-&gt;12|45-&gt;14|45-&gt;14|45-&gt;14|46-&gt;15|53-&gt;22|53-&gt;22|55-&gt;24|55-&gt;24|55-&gt;24|56-&gt;25|60-&gt;29|60-&gt;29|62-&gt;31|62-&gt;31|62-&gt;31|63-&gt;32|67-&gt;36|67-&gt;36|69-&gt;38|69-&gt;38|69-&gt;38|70-&gt;39|75-&gt;44|75-&gt;44|77-&gt;46|77-&gt;46|77-&gt;46|78-&gt;47|80-&gt;49|80-&gt;49|82-&gt;51|82-&gt;51|82-&gt;51|83-&gt;52|86-&gt;55|86-&gt;55|88-&gt;57|88-&gt;57|88-&gt;57|89-&gt;58|91-&gt;60|91-&gt;60|93-&gt;62|93-&gt;62|93-&gt;62|94-&gt;63|96-&gt;65|96-&gt;65|98-&gt;67|98-&gt;67|98-&gt;67|99-&gt;68|103-&gt;72|103-&gt;72|105-&gt;74|105-&gt;74|105-&gt;74|106-&gt;75|118-&gt;87|118-&gt;87|120-&gt;89|120-&gt;89|120-&gt;89|121-&gt;90|122-&gt;91|122-&gt;91|124-&gt;93|124-&gt;93|124-&gt;93|125-&gt;94|129-&gt;98|129-&gt;98|131-&gt;100|131-&gt;100|131-&gt;100|132-&gt;101|134-&gt;103|134-&gt;103|136-&gt;105|136-&gt;105|136-&gt;105|137-&gt;106|138-&gt;107|138-&gt;107|139-&gt;108|144-&gt;113|144-&gt;113|145-&gt;114|146-&gt;115|146-&gt;115|147-&gt;116|147-&gt;116|147-&gt;116|147-&gt;116|156-&gt;125|156-&gt;125|156-&gt;125|157-&gt;126|158-&gt;127|158-&gt;127|159-&gt;128|159-&gt;128|161-&gt;130|162-&gt;131|165-&gt;134|166-&gt;135|175-&gt;144
+                  -- GENERATED --
+              */
+          
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

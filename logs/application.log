@@ -1,0 +1,236 @@
+2024-12-01 22:57:44 [34mINFO [0;39m [36mplay.api.http.EnabledFilters[0;39m [35m[0;39m Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+
+2024-12-01 22:57:44 [34mINFO [0;39m [36mplay.api.Play[0;39m [35m[0;39m Application started (Dev) (no global state)
+2024-12-01 22:57:50 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:57:55 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:58:05 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:58:15 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:58:25 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:58:35 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+java.lang.NullPointerException: Cannot invoke "java.lang.Double.doubleValue()" because "this.averageGradeLevel" is null
+	at actors.SearchCoordinatorActor.checkCompletion(SearchCoordinatorActor.java:181)
+	at actors.SearchCoordinatorActor.handleSentimentResponse(SearchCoordinatorActor.java:153)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 22:58:43 [34mINFO [0;39m [36mp.a.i.l.c.CoordinatedShutdownSupport[0;39m [35m[0;39m Starting synchronous coordinated shutdown with ServerStoppedReason reason and 40000 milliseconds timeout
+2024-12-01 22:58:43 [34mINFO [0;39m [36mplay.core.server.AkkaHttpServer[0;39m [35m[0;39m Stopping Akka HTTP server...
+2024-12-01 22:58:43 [34mINFO [0;39m [36mplay.core.server.AkkaHttpServer[0;39m [35m[0;39m Unbinding /[0:0:0:0:0:0:0:0]:9000
+2024-12-01 22:58:43 [34mINFO [0;39m [36mplay.core.server.AkkaHttpServer[0;39m [35m[0;39m Terminating server binding for /[0:0:0:0:0:0:0:0]:9000
+2024-12-01 22:58:43 [34mINFO [0;39m [36mplay.core.server.AkkaHttpServer[0;39m [35m[0;39m Running provided shutdown stop hooks
+2024-12-01 22:59:44 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:45 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:46 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 22:59:47 [31mWARN [0;39m [36mactors.UserActor[0;39m [35m[0;39m Received unknown message: java.lang.Object@7a9ef8da
+2024-12-01 22:59:49 [1;31mERROR[0;39m [36makka.actor.OneForOneStrategy[0;39m [35m[0;39m actor name [refresh-coordinator--92380130-1733111989012] is not unique!
+akka.actor.InvalidActorNameException: actor name [refresh-coordinator--92380130-1733111989012] is not unique!
+	at akka.actor.dungeon.ChildrenContainer$NormalChildrenContainer.reserve(ChildrenContainer.scala:134)
+	at akka.actor.dungeon.Children.reserveChild(Children.scala:146)
+	at akka.actor.dungeon.Children.reserveChild$(Children.scala:144)
+	at akka.actor.ActorCell.reserveChild(ActorCell.scala:410)
+	at akka.actor.dungeon.Children.makeChild(Children.scala:299)
+	at akka.actor.dungeon.Children.actorOf(Children.scala:48)
+	at akka.actor.dungeon.Children.actorOf$(Children.scala:47)
+	at akka.actor.ActorCell.actorOf(ActorCell.scala:410)
+	at actors.CacheManagerActor.lambda$handleRefreshCache$3(CacheManagerActor.java:213)
+	at java.base/java.util.concurrent.ConcurrentHashMap$KeySetView.forEach(ConcurrentHashMap.java:4709)
+	at actors.CacheManagerActor.handleRefreshCache(CacheManagerActor.java:211)
+	at actors.CacheManagerActor.lambda$createReceive$2(CacheManagerActor.java:141)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:214)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:213)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:269)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:270)
+	at akka.actor.Actor.aroundReceive(Actor.scala:537)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:535)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:579)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:547)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1311)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1841)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1806)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-12-01 23:00:27 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:29 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:29 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:29 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:29 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:30 [31mWARN [0;39m [36mactors.UserActor[0;39m [35m[0;39m Received unknown message: java.lang.Object@38a8eda9
+2024-12-01 23:00:50 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:51 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:52 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:53 [34mINFO [0;39m [36mp.a.http.HttpErrorHandlerExceptions[0;39m [35m[0;39m Registering exception handler: guice-provision-exception-handler
+2024-12-01 23:00:53 [31mWARN [0;39m [36mactors.UserActor[0;39m [35m[0;39m Received unknown message: java.lang.Object@736ccae0

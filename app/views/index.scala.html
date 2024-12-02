@@ -1,0 +1,358 @@
+@import models.data.VideoSearchData
+@import play.mvc.Http.RequestHeader
+@(searchHistory: List[VideoSearchData])(implicit request: RequestHeader)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>YouTube Search Results</title>
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #fff; /* White background for the theme */
+                color: #333;
+            }
+            .nav-bar {
+                display: flex;
+                align-items: center;
+                background-color: #d32f2f; /* Red color for the nav-bar */
+                padding: 10px 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .nav-bar h1 {
+                margin: 0;
+                color: #fff; /* White text for contrast */
+            }
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+            .search-container form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                max-width: 400px;
+            }
+            .search-container input {
+                padding: 8px 12px;
+                font-size: 14px;
+                border-radius: 25px;
+                border: 1px solid #d32f2f; /* Red border */
+                width: 100%;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+            }
+            .search-container input:focus {
+                outline: none;
+                border-color: #b71c1c; /* Darker red on focus */
+            }
+            .search-container button {
+                padding: 8px 12px;
+                font-size: 14px;
+                border-radius: 25px;
+                border: 1px solid #d32f2f;
+                background-color: #d32f2f; /* Red background */
+                color: white;
+                cursor: pointer;
+            }
+            .search-container button:hover {
+                background-color: #b71c1c; /* Darker red on hover */
+            }
+            .history-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .search-history-list {
+                list-style-type: none;
+                padding: 0;
+            }
+            .search-history-list > li {
+                background-color: #fff; /* White background for items */
+                border: 1px solid #d32f2f; /* Red border for emphasis */
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .video-list {
+                list-style-type: none;
+                padding: 0;
+            }
+            .video-card {
+                display: flex;
+                margin-bottom: 15px;
+                background-color: #fff; /* White background for video cards */
+                border: 1px solid #d32f2f; /* Red border */
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            .video-card img {
+                width: 200px;
+                height: 150px;
+                object-fit: cover;
+            }
+            .video-info {
+                padding: 10px;
+                flex-grow: 1;
+            }
+            .video-info a {
+                color: #d32f2f; /* Red for links */
+                text-decoration: none;
+            }
+            .video-info a:hover {
+                text-decoration: underline;
+            }
+            #loading-indicator {
+                color: #d32f2f; /* Red text for loading indicator */
+                display: none;
+            }
+            #error-container {
+                color: #b71c1c; /* Darker red for errors */
+            }
+        </style>
+
+    </head>
+    <body>
+            <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>Welcome To YTLytics</h1>
+        </div>
+
+            <!-- Search Container -->
+        <div class="search-container">
+            <form id="searchForm">
+                <input type="text" id="searchQuery" placeholder="Search Query..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+            <!-- Loading and Error Indicators -->
+        <div id="loading-indicator">
+            Searching... Please wait for a reasonable time
+        </div>
+        <div id="error-container"></div>
+
+            <!-- Results Container -->
+        <div class="history-container" id="results-container">
+            @* Initial search history rendering *@
+            @for(history <- searchHistory) {
+                @if(history != null && history.getVideos() != null && !history.getVideos().isEmpty()) {
+                    <div class="result-item">
+                        <h3>Query: @history.getQuery()</h3>
+                        <p>Sentiment: @history.getSentiment()</p>
+                        <p>FleshKincidan Grade: @history.getAvgFleshGrad()</p>
+                        <p>Flesh Read Ease Score: @history.getAvgFleshScore()</p>
+                        @for(video <- history.getVideos()) {
+                            <div class="video-item">
+                                <h4>@video.getTitle()</h4>
+                                <p>Channel: @video.getChannelTitle()</p>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+
+        <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const searchForm = document.getElementById('searchForm');
+                    const searchQuery = document.getElementById('searchQuery');
+                    const resultsContainer = document.getElementById('results-container');
+                    const loadingIndicator = document.getElementById('loading-indicator');
+                    const errorContainer = document.getElementById('error-container');
+                    let socket = null;
+
+                    // WebSocket URL from routes
+                    const wsUrl = "@routes.HomeController.searchWebSocket().webSocketURL()";
+
+                    function initWebSocket() {
+                        // Create WebSocket connection
+                        socket = new WebSocket(wsUrl);
+
+                        socket.onopen = () => {
+                            console.log('WebSocket connection established');
+                            errorContainer.textContent = ''; // Clear any previous errors
+                        };
+
+                        socket.onmessage = (event) => {
+                            try {
+                                const data = JSON.parse(event.data);
+                                displaySearchResults(data);
+                            } catch (error) {
+                                console.error('Error parsing message:', error);
+                                errorContainer.textContent = 'Error processing search results';
+                            } finally {
+                                loadingIndicator.style.display = 'none';
+                            }
+                        };
+
+                        socket.onclose = (event) => {
+                            console.log('WebSocket connection closed');
+                            errorContainer.textContent = 'WebSocket disconnected. Reconnecting...';
+                            // Attempt to reconnect
+                            setTimeout(initWebSocket, 3000);
+                        };
+
+                        socket.onerror = (error) => {
+                            console.error('WebSocket error:', error);
+                            errorContainer.textContent = 'WebSocket connection error';
+                            loadingIndicator.style.display = 'none';
+                        };
+                    }
+
+                    let searchResultsCount = 0;
+                    const MAX_SEARCH_RESULTS = 10;
+
+                    function displaySearchResults(searchData) {
+                        // Check if search data is valid
+                        if (!searchData || !searchData.videos || searchData.videos.length === 0) {
+                            resultsContainer.innerHTML += '<p>No results found</p>';
+                            return;
+                        }
+
+                        // Remove existing result with the same query if present
+                        const existingResults = resultsContainer.querySelectorAll('.result-item');
+                        existingResults.forEach(item => {
+                            const queryHeader = item.querySelector('h3');
+                            if (queryHeader && queryHeader.textContent === `Query: ${searchData.query}`) {
+                                resultsContainer.removeChild(item);
+                                searchResultsCount--; // Decrement count as we're removing an item
+                            }
+                        });
+
+                        // Create result item
+                        const resultItem = document.createElement('div');
+                        resultItem.classList.add('result-item');
+
+                        // Add query and sentiment
+                        const queryHeader = document.createElement('h3');
+                        queryHeader.textContent = `Query: ${searchData.query}`;
+                        resultItem.appendChild(queryHeader);
+
+                        const sentimentPara = document.createElement('p');
+                        sentimentPara.textContent = `Sentiment: ${searchData.sentiment || 'N/A'}`;
+                        resultItem.appendChild(sentimentPara);
+
+                        // Add Flesch-Kincaid and Flesch Reading Ease scores
+                        if (searchData.fleschKincaidGrade !== undefined) {
+                            const fleschGradePara = document.createElement('p');
+                            fleschGradePara.textContent = `Flesch-Kincaid Grade: ${searchData.fleschKincaidGrade.toFixed(2)}`;
+                            resultItem.appendChild(fleschGradePara);
+                        }
+
+                        if (searchData.fleschReadingEase !== undefined) {
+                            const fleschEasePara = document.createElement('p');
+                            fleschEasePara.textContent = `Flesch Reading Ease: ${searchData.fleschReadingEase.toFixed(2)}`;
+                            resultItem.appendChild(fleschEasePara);
+                        }
+
+
+                        // Add videos
+                        const videoList = document.createElement('ul');
+                        videoList.classList.add('video-list');
+
+                        searchData.videos.forEach(video => {
+                            const videoItem = document.createElement('li');
+                            videoItem.classList.add('video-card');
+
+                            // Video thumbnail
+                            const thumbnailImg = document.createElement('img');
+                            thumbnailImg.src = video.thumbnailUrl || '/placeholder-thumbnail.jpg';
+                            thumbnailImg.alt = 'Video Thumbnail';
+
+                            // Video info container
+                            const videoInfo = document.createElement('div');
+                            videoInfo.classList.add('video-info');
+
+                            const videoTitle = document.createElement('h4');
+                            const videoTitleLink = document.createElement('a');
+                            videoTitleLink.href = video.videoUrl || '#';
+                            videoTitleLink.target = '_blank';
+                            videoTitleLink.textContent = video.title;
+                            videoTitle.appendChild(videoTitleLink);
+
+                            const channelPara = document.createElement('p');
+                            const channelLink = document.createElement('a');
+                            channelLink.href = `/channel/${video.channelId}`;
+                            channelLink.target = '_blank';
+                            channelLink.textContent = `Channel: ${video.channelTitle}`;
+                            channelPara.appendChild(channelLink);
+
+                            const descriptionPara = document.createElement('p');
+                            descriptionPara.textContent = `Description: ${video.description || 'No description'}`;
+
+                            const tagLink = document.createElement('p');
+                            const tagsAnchor = document.createElement('a');
+                            tagsAnchor.href = `/tags/${video.videoId}`;
+                            tagsAnchor.textContent = 'Tags';
+                            tagLink.appendChild(tagsAnchor);
+
+                            videoInfo.appendChild(videoTitle);
+                            videoInfo.appendChild(channelPara);
+                            videoInfo.appendChild(descriptionPara);
+                            videoInfo.appendChild(tagLink);
+
+                            videoItem.appendChild(thumbnailImg);
+                            videoItem.appendChild(videoInfo);
+
+                            videoList.appendChild(videoItem);
+                        });
+
+                        resultItem.appendChild(videoList);
+
+                        // Insert new result at the top of the container
+                        if (resultsContainer.firstChild) {
+                            resultsContainer.insertBefore(resultItem, resultsContainer.firstChild);
+                        } else {
+                            resultsContainer.appendChild(resultItem);
+                        }
+
+                        // Increment search results count
+                        searchResultsCount++;
+
+                        // If we exceed max results, remove from the bottom
+                        if (searchResultsCount > MAX_SEARCH_RESULTS) {
+                            resultsContainer.removeChild(resultsContainer.lastElementChild);
+                            searchResultsCount = MAX_SEARCH_RESULTS;
+                        }
+                    }
+                    // Initialize WebSocket on page load
+                    initWebSocket();
+
+                    // Search form submission
+                    searchForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const query = searchQuery.value.trim();
+
+                        if (!query) {
+                            errorContainer.textContent = 'Please enter a search term';
+                            return;
+                        }
+
+                        if (!socket || socket.readyState !== WebSocket.OPEN) {
+                            errorContainer.textContent = 'WebSocket is not connected. Please try again.';
+                            return;
+                        }
+
+                        // Show loading indicator
+                        loadingIndicator.style.display = 'block';
+                        errorContainer.textContent = '';
+
+                        // Send search query via WebSocket
+                        socket.send(query);
+                        // Clear input after sending
+                        searchQuery.value = '';
+                    });
+                });
+        </script>
+    </body>
+</html>

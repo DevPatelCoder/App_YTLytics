@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChannelVideoData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.data</a> &gt; <span class="el_source">ChannelVideoData.java</span></div><h1>ChannelVideoData.java</h1><pre class="source lang-java linenums">package models.data;
+
+import java.util.List;
+
+/**
+ * Represents a container for YouTube channel video data and channel metadata.
+ * It holds a list of video data objects and the associated channel metadata.
+ *
+ */
+public class ChannelVideoData {
+
+    /** A list of video data associated with the channel. */
+    private List&lt;VideoData&gt; videoDataList;
+
+    /** The metadata for the channel. */
+    private ChannelMetaData channelData;
+
+    /**
+     * Constructs a new ChannelVideoData object with the provided list of video data and channel metadata.
+     *
+     * @param videoDataList the list of video data objects
+     * @param channelData the metadata of the channel
+     */
+<span class="fc" id="L24">    public ChannelVideoData(List&lt;VideoData&gt; videoDataList, ChannelMetaData channelData) {</span>
+<span class="fc" id="L25">        this.videoDataList = videoDataList;</span>
+<span class="fc" id="L26">        this.channelData = channelData;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Gets the list of video data associated with the channel.
+     *
+     * @return the list of video data
+     */
+    public List&lt;VideoData&gt; getVideoDataList() {
+<span class="nc" id="L35">        return videoDataList;</span>
+    }
+
+    /**
+     * Gets the metadata of the channel.
+     *
+     * @return the channel metadata
+     */
+    public ChannelMetaData getChannelData() {
+<span class="fc" id="L44">        return channelData;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>videoList.template.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">views.html</a> &gt; <span class="el_source">videoList.template.scala</span></div><h1>videoList.template.scala</h1><pre class="source lang-java linenums">
+package views.html
+
+import _root_.play.twirl.api.TwirlFeatureImports._
+import _root_.play.twirl.api.TwirlHelperImports._
+import _root_.play.twirl.api.Html
+import _root_.play.twirl.api.JavaScript
+import _root_.play.twirl.api.Txt
+import _root_.play.twirl.api.Xml
+import models._
+import controllers._
+import play.api.i18n._
+import views.html._
+import play.api.templates.PlayMagic._
+import java.lang._
+import java.util._
+import play.core.j.PlayMagicForJava._
+import play.mvc._
+import play.api.data.Field
+import play.data._
+import play.core.j.PlayFormsMagicForJava._
+import scala.jdk.CollectionConverters._
+/*1.2*/import models.data.VideoData
+
+<span class="nc" id="L25">object videoList extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template2[String,List[VideoData],play.twirl.api.HtmlFormat.Appendable] {</span>
+
+  /**/
+  def apply/*3.2*/(tag: String, videos: List[VideoData]):play.twirl.api.HtmlFormat.Appendable = {
+<span class="nc" id="L29">    _display_ {</span>
+      {
+
+
+<span class="nc" id="L33">Seq[Any](format.raw/*4.1*/(&quot;&quot;&quot;</span>
+<span class="nc" id="L34">&quot;&quot;&quot;),_display_(/*5.2*/main(&quot;Videos for @tag&quot;)/*5.25*/ {_display_(Seq[Any](format.raw/*5.27*/(&quot;&quot;&quot;</span>
+<span class="nc" id="L35">    &quot;&quot;&quot;),format.raw/*6.5*/(&quot;&quot;&quot;&lt;link rel=&quot;icon&quot; href=&quot;&quot;&quot;&quot;),_display_(/*6.29*/routes/*6.35*/.Assets.versioned(&quot;images/img.png&quot;)),format.raw/*6.70*/(&quot;&quot;&quot;&quot; type=&quot;image/png&quot;&gt;</span>
+<span class="nc" id="L36">    &lt;link rel=&quot;script&quot; href=&quot;&quot;&quot;&quot;),_display_(/*7.31*/routes/*7.37*/.Assets.versioned(&quot;javascipts/main.js&quot;)),format.raw/*7.76*/(&quot;&quot;&quot;&quot;&gt;</span>
+<span class="nc" id="L37">    &lt;link rel=&quot;stylesheet&quot; href=&quot;&quot;&quot;&quot;),_display_(/*8.35*/routes/*8.41*/.Assets.versioned(&quot;stylesheets/main.css&quot;)),format.raw/*8.82*/(&quot;&quot;&quot;&quot;&gt;</span>
+
+<span class="nc" id="L39">    &lt;h2&gt;Videos for Tag: &quot;&quot;&quot;),_display_(/*10.26*/tag),format.raw/*10.29*/(&quot;&quot;&quot;&lt;/h2&gt;</span>
+    &lt;ul&gt;
+<span class="nc" id="L41">    &quot;&quot;&quot;),_display_(/*12.6*/for(video &lt;- videos) yield /*12.26*/ {_display_(Seq[Any](format.raw/*12.28*/(&quot;&quot;&quot;</span>
+        &quot;&quot;&quot;),format.raw/*13.9*/(&quot;&quot;&quot;&lt;li&gt;
+            &lt;a href=&quot;&quot;&quot;&quot;),_display_(/*14.23*/video/*14.28*/.getVideoUrl()),format.raw/*14.42*/(&quot;&quot;&quot;&quot;&gt;&quot;&quot;&quot;),_display_(/*14.45*/video/*14.50*/.getTitle()),format.raw/*14.61*/(&quot;&quot;&quot;&lt;/a&gt;&lt;br&gt;
+            &lt;img src=&quot;&quot;&quot;&quot;),_display_(/*15.24*/video/*15.29*/.getThumbnailUrl()),format.raw/*15.47*/(&quot;&quot;&quot;&quot; alt=&quot;Thumbnail&quot;&gt;&lt;br&gt;
+            &lt;p&gt;&quot;&quot;&quot;),_display_(if(video.getDescription().nonEmpty)/*16.52*/ {_display_(Seq[Any](format.raw/*16.54*/(&quot;&quot;&quot; &quot;&quot;&quot;),_display_(/*16.56*/video/*16.61*/.getDescription()),format.raw/*16.78*/(&quot;&quot;&quot; &quot;&quot;&quot;)))}else/*16.86*/{_display_(Seq[Any](format.raw/*16.87*/(&quot;&quot;&quot; &quot;&quot;&quot;),format.raw/*16.88*/(&quot;&quot;&quot;&lt;em&gt;No description available&lt;/em&gt; &quot;&quot;&quot;)))}),format.raw/*16.123*/(&quot;&quot;&quot;&lt;/p&gt;
+        &lt;/li&gt;
+<span class="nc" id="L47">    &quot;&quot;&quot;)))}),format.raw/*18.6*/(&quot;&quot;&quot;</span>
+<span class="nc" id="L48">    &quot;&quot;&quot;),format.raw/*19.5*/(&quot;&quot;&quot;&lt;/ul&gt;</span>
+&quot;&quot;&quot;)))}))
+      }
+    }
+  }
+
+<span class="nc" id="L54">  def render(tag:String,videos:List[VideoData]): play.twirl.api.HtmlFormat.Appendable = apply(tag,videos)</span>
+
+<span class="nc" id="L56">  def f:((String,List[VideoData]) =&gt; play.twirl.api.HtmlFormat.Appendable) = (tag,videos) =&gt; apply(tag,videos)</span>
+
+<span class="nc" id="L58">  def ref: this.type = this</span>
+
+}
+
+
+              /*
+                  -- GENERATED --
+                  SOURCE: app/views/videoList.scala.html
+                  HASH: 109c0862b43f24b9e9856ef67d374057228b806a
+                  MATRIX: 610-&gt;1|963-&gt;32|1095-&gt;71|1122-&gt;73|1153-&gt;96|1192-&gt;98|1223-&gt;103|1273-&gt;127|1287-&gt;133|1342-&gt;168|1418-&gt;218|1432-&gt;224|1491-&gt;263|1554-&gt;300|1568-&gt;306|1629-&gt;347|1685-&gt;376|1709-&gt;379|1755-&gt;399|1791-&gt;419|1831-&gt;421|1867-&gt;430|1921-&gt;457|1935-&gt;462|1970-&gt;476|2000-&gt;479|2014-&gt;484|2046-&gt;495|2105-&gt;527|2119-&gt;532|2158-&gt;550|2259-&gt;624|2299-&gt;626|2328-&gt;628|2342-&gt;633|2380-&gt;650|2405-&gt;658|2444-&gt;659|2473-&gt;660|2540-&gt;695|2594-&gt;719|2626-&gt;724
+                  LINES: 23-&gt;1|28-&gt;3|33-&gt;4|34-&gt;5|34-&gt;5|34-&gt;5|35-&gt;6|35-&gt;6|35-&gt;6|35-&gt;6|36-&gt;7|36-&gt;7|36-&gt;7|37-&gt;8|37-&gt;8|37-&gt;8|39-&gt;10|39-&gt;10|41-&gt;12|41-&gt;12|41-&gt;12|42-&gt;13|43-&gt;14|43-&gt;14|43-&gt;14|43-&gt;14|43-&gt;14|43-&gt;14|44-&gt;15|44-&gt;15|44-&gt;15|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|45-&gt;16|47-&gt;18|48-&gt;19
+                  -- GENERATED --
+              */
+          
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

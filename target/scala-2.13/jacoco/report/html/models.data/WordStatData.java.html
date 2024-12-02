@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WordStatData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.data</a> &gt; <span class="el_source">WordStatData.java</span></div><h1>WordStatData.java</h1><pre class="source lang-java linenums">package models.data;
+
+import java.util.Map;
+
+/**
+ * Represents the word count statistics for a specific search query.
+ * Contains the search query string and a map of word counts.
+ *
+ */
+public class WordStatData {
+
+    /** The search query string. */
+    private String search;
+
+    /** The map of words and their respective counts for the search query. */
+    private Map&lt;String, Integer&gt; wordCount;
+
+    /**
+     * Constructs a new WordStatData object with the specified search query and word count map.
+     *
+     * @param search the search query string
+     * @param wordCount the map of word counts
+     */
+<span class="fc" id="L24">    public WordStatData(String search, Map&lt;String, Integer&gt; wordCount) {</span>
+<span class="fc" id="L25">        this.search = search;</span>
+<span class="fc" id="L26">        this.wordCount = wordCount;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Gets the search query string.
+     *
+     * @return the search query
+     */
+    public String getSearch() {
+<span class="fc" id="L35">        return search;</span>
+    }
+
+    /**
+     * Gets the map of word counts for the search query.
+     *
+     * @return the map of word counts
+     */
+    public Map&lt;String, Integer&gt; getWordCount() {
+<span class="fc" id="L44">        return wordCount;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

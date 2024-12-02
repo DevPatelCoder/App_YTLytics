@@ -1,0 +1,20 @@
+@import models.data.VideoData
+
+@(tag: String, videos: List[VideoData])
+
+@main("Videos for @tag") {
+    <link rel="icon" href="@routes.Assets.versioned("images/img.png")" type="image/png">
+    <link rel="script" href="@routes.Assets.versioned("javascipts/main.js")">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
+
+    <h2>Videos for Tag: @tag</h2>
+    <ul>
+    @for(video <- videos) {
+        <li>
+            <a href="@video.getVideoUrl()">@video.getTitle()</a><br>
+            <img src="@video.getThumbnailUrl()" alt="Thumbnail"><br>
+            <p>@if(video.getDescription().nonEmpty) { @video.getDescription() } else { <em>No description available</em> }</p>
+        </li>
+    }
+    </ul>
+}

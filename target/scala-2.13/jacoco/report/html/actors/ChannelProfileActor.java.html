@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChannelProfileActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">ChannelProfileActor.java</span></div><h1>ChannelProfileActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.actor.Status;
+import models.api.YouTubeService;
+import models.data.ChannelVideoData;
+import models.data.Constants;
+import java.io.IOException;
+
+/**
+ * The {@code ChannelProfileActor} handles fetching recent videos and metadata for a specific YouTube channel.
+ * It interacts with the {@code YouTubeService} to retrieve channel data and sends the results back to the requesting actor.
+ *
+ * &lt;p&gt;This actor receives requests encapsulated in {@code SearchChannelVideosRequest} messages
+ * and responds with {@code SearchChannelVideosResponse} messages containing the retrieved channel video data.
+ */
+public class ChannelProfileActor extends AbstractActor {
+    private final YouTubeService youTubeService;
+
+    private final ActorRef parentActor;
+
+    /**
+     * Constructs a {@code ChannelProfileActor}.
+     *
+     * @param youTubeService The {@code YouTubeService} instance used to fetch channel data from the YouTube API.
+     * @param parentActor    The parent actor that instantiated this actor.
+     */
+<span class="fc" id="L30">    public ChannelProfileActor(YouTubeService youTubeService, ActorRef parentActor) {</span>
+<span class="fc" id="L31">        this.youTubeService = youTubeService;</span>
+<span class="fc" id="L32">        this.parentActor = parentActor;</span>
+
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * Factory method to create {@code Props} for this actor.
+     *
+     * @param youTubeService The {@code YouTubeService} instance used to fetch data.
+     * @param parentActor    The parent actor reference.
+     * @return A {@code Props} instance for creating this actor.
+     */
+    public static Props props(YouTubeService youTubeService, ActorRef parentActor) {
+<span class="fc" id="L44">        return Props.create(ChannelProfileActor.class,</span>
+<span class="fc" id="L45">                () -&gt; new ChannelProfileActor(youTubeService, parentActor));</span>
+    }
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code SearchChannelVideosRequest}: Fetches recent videos of the specified channel.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L60">        return receiveBuilder()</span>
+<span class="fc" id="L61">                .match(SearchChannelVideosRequest.class, this::handleSearchVideos)</span>
+<span class="fc" id="L62">                .build();</span>
+    }
+
+    /**
+     * Handles the {@code SearchChannelVideosRequest} message to fetch recent videos for a specific channel.
+     *
+     * @param request The {@code SearchChannelVideosRequest} containing the channel ID.
+     */
+    private void handleSearchVideos(SearchChannelVideosRequest request) {
+        try {
+<span class="fc" id="L72">            ChannelVideoData data = youTubeService.getChannelRecentVideos(request.channelId, Constants.MAX_VIDEOS_DISPLAY_COUNT);</span>
+
+<span class="fc" id="L74">            getSender().tell(new SearchChannelVideosResponse(data), getSelf());</span>
+<span class="fc" id="L75">        } catch (IOException e) {</span>
+<span class="fc" id="L76">            getSender().tell(new Status.Failure(e), getSelf());</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Message to request recent videos of a specific YouTube channel.
+     */
+    public static class SearchChannelVideosRequest {
+        public final String channelId;
+        /**
+         * Constructs a {@code SearchChannelVideosRequest}.
+         *
+         * @param channelId The ID of the YouTube channel to fetch videos for.
+         */
+<span class="fc" id="L90">        public SearchChannelVideosRequest(String channelId) {</span>
+<span class="fc" id="L91">            this.channelId = channelId;</span>
+<span class="fc" id="L92">        }</span>
+    }
+
+    /**
+     * Message containing the response for a channel videos search.
+     */
+    public static class SearchChannelVideosResponse {
+        public final ChannelVideoData channelVideoData;
+        /**
+         * Constructs a {@code SearchChannelVideosResponse}.
+         *
+         * @param channelVideoData The {@code ChannelVideoData} containing the recent videos and metadata.
+         */
+<span class="fc" id="L105">        public SearchChannelVideosResponse(ChannelVideoData channelVideoData) {</span>
+<span class="fc" id="L106">            this.channelVideoData = channelVideoData;</span>
+<span class="fc" id="L107">        }</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

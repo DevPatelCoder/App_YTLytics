@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserRefreshTimerActor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">actors</a> &gt; <span class="el_source">UserRefreshTimerActor.java</span></div><h1>UserRefreshTimerActor.java</h1><pre class="source lang-java linenums">package actors;
+
+import akka.actor.AbstractActor;
+import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import scala.concurrent.duration.Duration;
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * The {@code UserRefreshTimerActor} class is an Akka actor responsible for managing periodic timers.
+ * These timers notify the parent actor (e.g., {@code CacheManagerActor}) about timed events
+ * such as cache refresh triggers.
+ *
+ * &lt;p&gt;The actor supports starting and stopping timers identified by unique names.
+ * It uses Akka's scheduling mechanism to handle periodic tasks and ensures that
+ * notifications are sent to the parent actor when a timer tick occurs.
+ */
+<span class="fc" id="L23">public class UserRefreshTimerActor extends AbstractActor{</span>
+    /**
+     * Logger instance for logging information and debugging related to {@code UserRefreshTimerActor}.
+     */
+<span class="fc" id="L27">    private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);</span>
+    /**
+     * A map to track the last refresh times of timers, keyed by their unique names.
+     */
+<span class="fc" id="L31">    private final Map&lt;String, Instant&gt; lastRefreshTimes = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Message to start a timer with a specified interval.
+     */
+    public static class StartTimer {
+        /**
+         * The interval in seconds between timer ticks.
+         */
+        private final long intervalSeconds;
+        /**
+         * The unique name of the timer.
+         */
+        private final String timerName;
+
+<span class="fc" id="L46">        public StartTimer(String timerName, long intervalSeconds) {</span>
+<span class="fc" id="L47">            this.timerName = timerName;</span>
+            /**
+             * Constructs a {@code StartTimer} message.
+             *
+             * @param timerName     The name of the timer.
+             * @param intervalSeconds The interval in seconds between timer ticks.
+             */
+<span class="fc" id="L54">            this.intervalSeconds = intervalSeconds;</span>
+<span class="fc" id="L55">        }</span>
+    }
+
+    /**
+     * Message to stop a timer.
+     */
+    public static class StopTimer {
+        /**
+         * The unique name of the timer to stop.
+         */
+        private final String timerName;
+
+        /**
+         * Constructs a {@code StopTimer} message.
+         *
+         * @param timerName The name of the timer to stop.
+         */
+<span class="fc" id="L72">        public StopTimer(String timerName) {</span>
+<span class="fc" id="L73">            this.timerName = timerName;</span>
+<span class="fc" id="L74">        }</span>
+    }
+
+    /**
+     * Internal message representing a timer tick for a specific timer.
+     */
+    private static class TimerTick {
+        /**
+         * The unique name of the timer that triggered the tick.
+         */
+        public final String timerName;
+
+        /**
+         * Constructs a {@code TimerTick} message.
+         *
+         * @param timerName The name of the timer that triggered the tick.
+         */
+<span class="fc" id="L91">        public TimerTick(String timerName) {</span>
+<span class="fc" id="L92">            this.timerName = timerName;</span>
+<span class="fc" id="L93">        }</span>
+    }
+
+    /**
+     * Factory method to create {@code Props} for this actor.
+     *
+     * @return A {@code Props} instance for creating a {@code UserRefreshTimerActor}.
+     */
+    public static Props props() {
+<span class="fc" id="L102">        return Props.create(UserRefreshTimerActor.class);</span>
+    }
+
+    /**
+     * Handles the {@code StartTimer} message to start a periodic timer.
+     *
+     * &lt;p&gt;If the timer does not already exist, it schedules a periodic task that sends
+     * {@code TimerTick} messages to this actor at the specified interval.
+     *
+     * @param msg The {@code StartTimer} message containing the timer name and interval.
+     */
+    private void handleStartTimer(StartTimer msg) {
+<span class="fc" id="L114">        log.info(&quot;Starting timer: {} with interval: {} seconds&quot;, msg.timerName, msg.intervalSeconds);</span>
+
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (!lastRefreshTimes.containsKey(msg.timerName)) {</span>
+<span class="fc" id="L117">            lastRefreshTimes.put(msg.timerName, Instant.now());</span>
+
+            // Schedule the periodic timer
+<span class="fc" id="L120">            getContext().system().scheduler().scheduleAtFixedRate(</span>
+<span class="fc" id="L121">                    Duration.create(0, TimeUnit.SECONDS),</span>
+<span class="fc" id="L122">                    Duration.create(msg.intervalSeconds, TimeUnit.SECONDS),</span>
+<span class="fc" id="L123">                    getSelf(),</span>
+<span class="fc" id="L124">                    new TimerTick(msg.timerName),</span>
+<span class="fc" id="L125">                    getContext().system().dispatcher(),</span>
+<span class="fc" id="L126">                    getSelf()</span>
+            );
+        }
+<span class="fc" id="L129">    }</span>
+
+    /**
+     * Handles the {@code StopTimer} message to stop a timer.
+     *
+     * &lt;p&gt;The timer name is removed from the {@code lastRefreshTimes} map, effectively
+     * ignoring future ticks from the timer.
+     *
+     * @param msg The {@code StopTimer} message containing the timer name.
+     */
+    private void handleStopTimer(StopTimer msg) {
+<span class="fc" id="L140">        log.info(&quot;Stopping timer: {}&quot;, msg.timerName);</span>
+<span class="fc" id="L141">        lastRefreshTimes.remove(msg.timerName);</span>
+        // Note: The scheduled timer will continue running but will be ignored
+        // when the timer name is not in lastRefreshTimes
+<span class="fc" id="L144">    }</span>
+
+    /**
+     * Handles the {@code TimerTick} message when a scheduled timer triggers a tick.
+     *
+     * &lt;p&gt;If the timer is active (exists in {@code lastRefreshTimes}), the actor updates
+     * the last refresh time and notifies the parent actor about the tick event.
+     *
+     * @param tick The {@code TimerTick} message containing the timer name.
+     */
+    private void handleTimerTick(TimerTick tick) {
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (lastRefreshTimes.containsKey(tick.timerName)) {</span>
+<span class="fc" id="L156">            log.debug(&quot;Timer tick for: {}&quot;, tick.timerName);</span>
+<span class="fc" id="L157">            lastRefreshTimes.put(tick.timerName, Instant.now());</span>
+
+            // Notify the parent actor (assumed to be CacheManagerActor) about the tick
+<span class="fc" id="L160">            getContext().getParent().tell(</span>
+                    new UserActor.RefreshCache(),
+<span class="fc" id="L162">                    getSelf()</span>
+            );
+        }
+<span class="fc" id="L165">    }</span>
+
+    /**
+     * Defines the message handling behavior of this actor.
+     *
+     * &lt;p&gt;Handles:
+     * &lt;ul&gt;
+     *     &lt;li&gt;{@code StartTimer}: Starts a new timer with the specified interval.&lt;/li&gt;
+     *     &lt;li&gt;{@code StopTimer}: Stops an existing timer by its name.&lt;/li&gt;
+     *     &lt;li&gt;{@code TimerTick}: Processes a tick event for an active timer.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return The {@code Receive} instance defining the actor's behavior.
+     */
+    @Override
+    public Receive createReceive() {
+<span class="fc" id="L181">        return receiveBuilder()</span>
+<span class="fc" id="L182">                .match(StartTimer.class, this::handleStartTimer)</span>
+<span class="fc" id="L183">                .match(StopTimer.class, this::handleStopTimer)</span>
+<span class="fc" id="L184">                .match(TimerTick.class, this::handleTimerTick)</span>
+<span class="fc" id="L185">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

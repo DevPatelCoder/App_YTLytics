@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadabilityGrade.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">models.api</a> &gt; <span class="el_source">ReadabilityGrade.java</span></div><h1>ReadabilityGrade.java</h1><pre class="source lang-java linenums">package models.api;
+
+import java.util.List;
+import java.util.stream.Collectors;
+/**
+ * This class provides methods to calculate readability scores for a given text using the
+ * Flesch-Kincaid Grade Level and the Flesch Reading Ease formulas. It also includes utility methods
+ * for counting words, sentences, and syllables in the text, as well as calculating average scores
+ * for multiple pieces of text.
+ */
+<span class="nc" id="L11">public class ReadabilityGrade {</span>
+    /**
+     * Calculates the Flesch-Kincaid Grade Level for a given text.
+     * The Flesch-Kincaid Grade Level formula estimates the U.S. school grade level required
+     * to understand the text.
+     *
+     * @param text The text to analyze.
+     * @return The Flesch-Kincaid Grade Level score rounded to two decimal places.
+     */
+    public static double calculateFleschKincaidGradeLevel(String text) {
+
+<span class="nc" id="L22">        int wordCount = countWords(text);</span>
+<span class="nc" id="L23">        int sentenceCount = countSentences(text);</span>
+<span class="nc" id="L24">        int syllableCount = countSyllables(text);</span>
+
+<span class="nc bnc" id="L26" title="All 4 branches missed.">        if (wordCount == 0 || sentenceCount == 0) {</span>
+<span class="nc" id="L27">            return 0.0; // Avoid division by zero</span>
+        }
+
+<span class="nc" id="L30">        double value = 0.39 * ((double) wordCount / sentenceCount) + 11.8 * ((double) syllableCount / wordCount) - 15.59;</span>
+<span class="nc" id="L31">        return Math.round(value * 100.0) / 100.0;</span>
+//        return 0.39 * ((double) wordCount / sentenceCount) + 11.8 * ((double) syllableCount / wordCount) - 15.59;
+    }
+
+    /**
+     * Calculates the Flesch Reading Ease Score for a given text.
+     * The Flesch Reading Ease formula measures how easy the text is to understand,
+     * with higher scores indicating easier readability.
+     *
+     * @param text The text to analyze.
+     * @return The Flesch Reading Ease score rounded to two decimal places.
+     */
+    public static double calculateFleschReadingEase(String text) {
+<span class="nc" id="L44">        int wordCount = countWords(text);</span>
+<span class="nc" id="L45">        int sentenceCount = countSentences(text);</span>
+<span class="nc" id="L46">        int syllableCount = countSyllables(text);</span>
+
+<span class="nc bnc" id="L48" title="All 4 branches missed.">        if (wordCount == 0 || sentenceCount == 0) {</span>
+<span class="nc" id="L49">            return 0.0; // Avoid division by zero</span>
+        }
+
+<span class="nc" id="L52">        double value = 206.835 - 1.015 * ((double) wordCount / sentenceCount) - 84.6 * ((double) syllableCount / wordCount);</span>
+<span class="nc" id="L53">        return Math.round(value * 100.0) / 100.0;</span>
+
+//        return 206.835 - 1.015 * ((double) wordCount / sentenceCount) - 84.6 * ((double) syllableCount / wordCount);
+    }
+    /**
+     * Counts the number of words in a given text.
+     *
+     * @param text The text to analyze.
+     * @return The word count.
+     */
+    // Helper methods
+//    static int countWords(String text) {
+//        return text.trim().split(&quot;\\s+&quot;).length;
+//    }
+    static int countWords(String text) {
+<span class="nc bnc" id="L68" title="All 4 branches missed.">        if (text == null || text.trim().isEmpty()) {</span>
+<span class="nc" id="L69">            return 0;</span>
+        }
+<span class="nc" id="L71">        String[] words = text.trim().split(&quot;\\b\\w+\\b&quot;);</span>
+<span class="nc" id="L72">        return words.length;</span>
+    }
+
+    /**
+     * Counts the number of sentences in a given text based on punctuation marks.
+     *
+     * @param text The text to analyze.
+     * @return The sentence count.
+     */
+    static int countSentences(String text) {
+<span class="nc" id="L82">        return text.split(&quot;[.!?]&quot;).length;</span>
+    }
+    /**
+     * Counts the number of syllables in a given word.
+     * The method assumes English phonetics and uses vowels to estimate syllable counts.
+     *
+     * @param word The word to analyze.
+     * @return The syllable count.
+     */
+    static int countSyllables(String word) {
+<span class="nc" id="L92">        String vowels = &quot;aeiouy&quot;;</span>
+<span class="nc" id="L93">        word = word.toLowerCase().replaceAll(&quot;[^a-z]&quot;, &quot;&quot;);</span>
+<span class="nc" id="L94">        int syllableCount = 0;</span>
+<span class="nc" id="L95">        boolean lastWasVowel = false;</span>
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        for (char c : word.toCharArray()) {</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            boolean isVowel = vowels.indexOf(c) != -1;</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">            if (isVowel &amp;&amp; !lastWasVowel) {</span>
+<span class="nc" id="L100">                syllableCount++;</span>
+            }
+<span class="nc" id="L102">            lastWasVowel = isVowel;</span>
+        }
+
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (word.endsWith(&quot;e&quot;) &amp;&amp; syllableCount &gt; 1) {</span>
+<span class="nc" id="L106">            syllableCount--;</span>
+        }
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        return syllableCount &gt; 0 ? syllableCount : 1;</span>
+    }
+
+    /**
+     * Calculates the average Flesch-Kincaid Grade Level for a list of texts.
+     *
+     * @param texts A list of texts to analyze.
+     * @return The average Flesch-Kincaid Grade Level score rounded to two decimal places.
+     */
+    public static double calculateAverageFleschKincaid(List&lt;String&gt; texts) {
+<span class="nc" id="L118">        double average = texts.stream()</span>
+<span class="nc" id="L119">                .mapToDouble(ReadabilityGrade::calculateFleschKincaidGradeLevel)</span>
+<span class="nc" id="L120">                .average()</span>
+<span class="nc" id="L121">                .orElse(0.0);</span>
+<span class="nc" id="L122">        return Math.round(average * 100.0)/ 100.0;</span>
+    }
+
+    /**
+     * Calculates the average Flesch Reading Ease Score for a list of texts.
+     *
+     * @param texts A list of texts to analyze.
+     * @return The average Flesch Reading Ease score rounded to two decimal places.
+     */
+    public static double calculateAverageFleschReadingEase(List&lt;String&gt; texts) {
+<span class="nc" id="L132">        double average = texts.stream()</span>
+<span class="nc" id="L133">                .mapToDouble(ReadabilityGrade::calculateFleschReadingEase)</span>
+<span class="nc" id="L134">                .average()</span>
+<span class="nc" id="L135">                .orElse(0.0);</span>
+<span class="nc" id="L136">        return Math.round(average * 100.0)/ 100.0;</span>
+
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
