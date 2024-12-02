@@ -8,9 +8,6 @@ import java.util.Map;
  * a list of videos that match the search, sentiment analysis, and word count statistics
  * for the query.
  *
- * @author Anubhav Mahajan
- * @author Arpnik Singh
- * @version 1.0
  */
 public class VideoSearchData {
 
@@ -31,18 +28,6 @@ public class VideoSearchData {
 
     private final double avgFleshScore;
 
-//    public double getFleshGrad() {
-//        return FleshGrad;
-//    }
-//
-//    private final double FleshGrad;
-//
-//    public double getFleshScor() {
-//        return FleshScor;
-//    }
-//
-//    private final double FleshScor;
-
     /** The search query string. */
     private String query;
 
@@ -62,9 +47,7 @@ public class VideoSearchData {
      * @param videos the list of video data matching the query
      * @param sentiment the sentiment analysis result for the query
      * @param wordCount the word count statistics for the query
-     * @author Anubhav Mahajan
-     * @author Arpnik Singh
-     */
+
     public VideoSearchData(String query, List<VideoData> videos, Sentiment sentiment,double avgFleshGrad, double avgFleshScore, Map<String, Integer> wordCount) {
         this.query = query;
         this.videos = videos;
@@ -78,7 +61,6 @@ public class VideoSearchData {
      * Gets the search query string.
      *
      * @return the search query
-     * @author Anubhav Mahajan
      */
     public String getQuery() {
         return query;
@@ -89,7 +71,6 @@ public class VideoSearchData {
      * Gets the list of videos returned by the search.
      *
      * @return the list of video data
-     * @author Anubhav Mahajan
      */
     public List<VideoData> getVideos() {
         return videos;
@@ -99,7 +80,6 @@ public class VideoSearchData {
      * Gets the word count statistics for the search query.
      *
      * @return the word count map
-     * @author Anubhav Mahajan
      */
     public Map<String, Integer> getWordCount() {
         return wordCount;
@@ -109,7 +89,6 @@ public class VideoSearchData {
      * Sets the word count statistics for the search query.
      *
      * @param wordCount the new word count map
-     * @author Arpnik Singh
      */
     public void setWordCount(Map<String, Integer> wordCount) {
         this.wordCount = wordCount;
@@ -119,7 +98,6 @@ public class VideoSearchData {
      * Gets the sentiment analysis result for the search query.
      *
      * @return the sentiment result
-     * @author Arpnik Singh
      */
     public Sentiment getSentiment() {
         return sentiment;
