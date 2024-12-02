@@ -25,9 +25,6 @@ import static org.mockito.Mockito.*;
  * These tests cover the functionality of interacting with the YouTube API for searching videos,
  * analyzing sentiment, and fetching recent channel videos.
  *
- * @author Anubhav Mahajan
- * @author Arpnik Singh
- * @author Shashwat Janakkumar Shah
  */
 public class YouTubeServiceTest {
 
@@ -65,8 +62,6 @@ public class YouTubeServiceTest {
      *
      * @throws GeneralSecurityException if there is an error with security settings.
      * @throws IOException if there is an I/O error while initializing mocks.
-     * @author Anubhav Mahajan
-     * @author Arpnik Singh
      */
 
     @Before
@@ -117,8 +112,6 @@ public class YouTubeServiceTest {
      * Verifies that the YouTube API is called correctly and the data is returned as expected.
      *
      * @throws Exception if any error occurs during the test.
-     *  author Anubhav Mahajan
-     *  @author Arpnik Singh
      */
     @Test
     public void searchVideosAndFetchFromYoutubeApi() throws Exception {
@@ -160,7 +153,6 @@ public class YouTubeServiceTest {
      * Verifies that the sentiment is analyzed correctly as HAPPY when appropriate.
      *
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Arpnik Singh
      */
     @Test
     public void testSentimentAnalysis() throws IOException {
@@ -221,7 +213,6 @@ public class YouTubeServiceTest {
      * Verifies that the sentiment is analyzed correctly as SAD when appropriate.
      *
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Arpnik Singh
      */
 
 
@@ -286,7 +277,6 @@ public class YouTubeServiceTest {
      * Verifies that the sentiment is analyzed correctly as NEUTRAL when appropriate.
      *
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Arpnik Singh
      */
     @Test
     public void testSentimentAnalysisWithNeutral() throws IOException {
@@ -349,7 +339,6 @@ public class YouTubeServiceTest {
      * Verifies that recent videos are fetched correctly based on the provided channel ID.
      *
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Anubhav Mahajan
      */
     @Test
     public void testGetChannelRecentVideos2() throws IOException {
@@ -419,7 +408,6 @@ public class YouTubeServiceTest {
     /**
      * Test for checking recent video list
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Arpnik Singh
      */
     @Test
     public void searchVideos_ShouldReturnVideoDataList() throws Exception {
@@ -460,8 +448,6 @@ public class YouTubeServiceTest {
     /**
      * Test for checking word stat
      * @throws IOException if there is an I/O error while fetching video data.
-     * @author Arpnik Singh
-     * @author Shashwat Janakkumar Shah
      */
     @Test
     public void getWordStats_ShouldReturnWordStatData() throws IOException {
