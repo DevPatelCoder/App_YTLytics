@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
  * This class contains unit tests for the AnalyseSentiment class.
  * It tests the functionality of sentiment analysis methods with different inputs.
  *
- * @author Arpnik Singh
  */
 public class AnalyseSentimentTest {
 
