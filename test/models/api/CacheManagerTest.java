@@ -24,10 +24,6 @@ import static org.mockito.Mockito.*;
  * handles caching behavior for YouTube data, including search results, channel results,
  * word statistics, video tags, and more.
  *
- * @author Anubhav Mahajan
- * @author Arpnik Singh
- * @author Hardeep Singh
- * @author Shashwat Janakkumar Shah
  */
 public class CacheManagerTest {
 
@@ -48,7 +44,6 @@ public class CacheManagerTest {
      *
      * @throws GeneralSecurityException if there is an issue with security during setup
      * @throws IOException if an I/O exception occurs during setup
-     * @author Anubhav Mahajan
      */
     @Before
     public void setUp() throws GeneralSecurityException, IOException {
@@ -70,39 +65,11 @@ public class CacheManagerTest {
         }
     }
 
-    /**
-     * Tests that search results are fetched and added to the search cache correctly.
-     * Verifies that the service methods are called and the cached data is returned as expected.
-     *
-     * @throws IOException if an I/O exception occurs during the test
-     * @throws ExecutionException if there is an issue during the asynchronous operation
-     * @throws InterruptedException if the test thread is interrupted
-     * @author Arpnik Singh
-     */
-//    @Test
-//    public void testFetchAndAddToSearchCache() throws IOException, ExecutionException, InterruptedException {
-//        String search = "testSearch";
-//        List<VideoData> videos = getVideoData();
-//
-//        when(service.searchVideos(search, Constants.MAX_VIDEOS_DISPLAY_COUNT)).thenReturn(videos);
-//        when(service.getSentimentalAnalysis(search, Constants.MAX_DESC_SENTIMENT_COUNT)).thenReturn(Sentiment.HAPPY);
-//
-//        CompletableFuture<VideoSearchData> future = cacheManager.getSearchResultsAsync(search);
-//        VideoSearchData result = future.get();
-//
-//        assertNotNull(result);
-//        assertEquals(search, result.getQuery());
-//        assertEquals(videos, result.getVideos());
-//        assertEquals(Sentiment.HAPPY, result.getSentiment());
-//        verify(service).searchVideos(search, Constants.MAX_VIDEOS_DISPLAY_COUNT);
-//        verify(service).getSentimentalAnalysis(search, Constants.MAX_DESC_SENTIMENT_COUNT);
-//    }
-
+    
     /**
      * Tests that channel results are correctly fetched from the cache when the channel exists.
      *
      * @throws IOException if an I/O exception occurs during the test
-     * @author Anubhav Mahajan
      */
     @Test
     public void testGetChannelResults_ChannelExistsInCache() throws IOException {
@@ -121,7 +88,6 @@ public class CacheManagerTest {
      * Tests that channel results are fetched and added to the cache when the channel is not already cached.
      *
      * @throws IOException if an I/O exception occurs during the test
-     * @author Anubhav Mahajan
      */
     @Test
     public void testGetChannelResults_ChannelNotInCache_FetchAndAdd() throws IOException {
@@ -142,7 +108,6 @@ public class CacheManagerTest {
      * Tests the scenario when a channel is not in the cache and fetching the data fails.
      *
      * @throws IOException if an I/O exception occurs during the test
-     * @author Anubhav Mahajan
      */
     @Test
     public void testGetChannelResults_ChannelNotInCache_And_FetchFails() throws IOException {
@@ -161,7 +126,6 @@ public class CacheManagerTest {
      *
      * @param channel the channel name
      * @param data the channel data to cache
-     * @author Anubhav Mahajan
      */
     private void injectCacheEntry(String channel, ChannelVideoData data) {
         try {
@@ -175,50 +139,13 @@ public class CacheManagerTest {
         }
     }
 
-    /**
-     * Tests that search results are fetched from the cache when available.
-     * Verifies that the service is only called once.
-     *
-     * @throws IOException if an I/O exception occurs during the test
-     * @throws ExecutionException if there is an issue during the asynchronous operation
-     * @throws InterruptedException if the test thread is interrupted
-     * @author Arpnik Singh
-     */
-//    @Test
-//    public void testFetchFromSearchCache() throws IOException, ExecutionException, InterruptedException {
-//        String search = "testSearch";
-//        List<VideoData> videos = getVideoData();
-//
-//        when(service.searchVideos(search, Constants.MAX_VIDEOS_DISPLAY_COUNT)).thenReturn(videos);
-//        when(service.getSentimentalAnalysis(search, Constants.MAX_DESC_SENTIMENT_COUNT)).thenReturn(Sentiment.HAPPY);
-//
-//        CompletableFuture<VideoSearchData> future = cacheManager.getSearchResultsAsync(search);
-//        VideoSearchData result = future.get();
-//
-//        assertNotNull(result);
-//        assertEquals(search, result.getQuery());
-//        assertEquals(videos, result.getVideos());
-//        assertEquals(Sentiment.HAPPY, result.getSentiment());
-//
-//        // Fetch again to check cache hit
-//        CompletableFuture<VideoSearchData> future2 = cacheManager.getSearchResultsAsync(search);
-//        VideoSearchData result2 = future2.get();
-//        assertNotNull(result2);
-//        assertEquals(search, result2.getQuery());
-//        assertEquals(videos, result2.getVideos());
-//        assertEquals(Sentiment.HAPPY, result2.getSentiment());
-//
-//        // Verify that service was called only once
-//        verify(service, times(1)).searchVideos(search, Constants.MAX_VIDEOS_DISPLAY_COUNT);
-//        verify(service, times(1)).getSentimentalAnalysis(search, Constants.MAX_DESC_SENTIMENT_COUNT);
-//    }
+   
     /**
      * Tests the cache hit scenario for fetching word statistics. This test verifies that
      * when word statistics for a given search term are already available in the cache,
      * the data is retrieved from the cache without making a service call.
      *
      * @throws Exception if an error occurs during the test
-     * @author Shashwat Janakkumar Shah
      */
     @Test
     public void testGetWordStats_CacheHit() throws Exception {
@@ -251,7 +178,6 @@ public class CacheManagerTest {
      * Tests the case when the service throws an exception while fetching word statistics.
      *
      * @throws Exception if an error occurs during the test
-     * @author Shashwat Janakkumar Shah
      */
     @Test(expected = IOException.class)
     public void testGetWordStats_ServiceThrowsException() throws Exception {
@@ -270,7 +196,6 @@ public class CacheManagerTest {
      * @throws IOException if an I/O exception occurs during the test
      * @throws NoSuchFieldException if the field is not found
      * @throws IllegalAccessException if access to the field is restricted
-     * @author Hardeep Singh
      */
     @Test
     public void testGetVideoTags_CacheHit() throws IOException, NoSuchFieldException, IllegalAccessException {
